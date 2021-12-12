@@ -1,15 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
 import { Board } from './features/board/Board';
+import { Bag } from './features/bag/Bag';
+import {
+  Box,
+  Flex,
+  Heading,
+} from 'rebass'
+
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
-      <Board />
+    <div>
+      <Heading
+        p={4}
+        width={1}>
+      Words with Crown
+      </Heading>
+      <Flex>
+        <Box
+          width={1/4}
+          bg='primary'>
+          <Bag />
+        </Box>
+        <Box
+          bg='secondary'>
+        <Board />
+        </Box>
+      </Flex>
     </div>
   );
 }
