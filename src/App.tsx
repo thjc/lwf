@@ -1,5 +1,6 @@
 import { Board } from './features/board/Board';
 import { Bag } from './features/bag/Bag';
+import { Players } from './features/player/Players';
 import {
   Box,
   Flex,
@@ -18,12 +19,11 @@ function App() {
       </Heading>
       <Flex>
         <Box
-          width={1/4}
-          bg='primary'>
+          width={1/4}>
           <Bag />
+          <Players />
         </Box>
-        <Box
-          bg='secondary'>
+        <Box>
         <Board />
         </Box>
       </Flex>
