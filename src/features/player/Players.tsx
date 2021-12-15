@@ -12,6 +12,7 @@ import { Player } from './Player'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
+  PlayerState,
   selectPlayers
 } from './playersSlice';
 import styles from './Player.module.css';
@@ -23,7 +24,7 @@ export function Players() {
   return (
     <div>
       Players
-      {Array.from(players).map(x => {return (<Player player={x}></Player>)})}
+      {Array.from(players).map(x => {return (<Player player={x as PlayerState}></Player>)})}
     </div>
   );
 }

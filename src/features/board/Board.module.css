@@ -100,6 +100,7 @@
 
 .tileLetter {
   font-size: 8pt;
+  text-align: center;
   grid-column-start: 2;
   grid-row-start: 2;
 }

@@ -31,10 +31,13 @@ export const playersSlice = createSlice({
     accumulateScore: (state, action) => {
       state[action.payload.player].score += action.payload.delta
     },
+    addTiles: (state, action) => {
+      state[action.payload.player].tiles += action.payload.tiles
+    },
   },
 });
 
-export const { accumulateScore } = playersSlice.actions;
+export const { accumulateScore, addTiles } = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
