@@ -1,14 +1,12 @@
 import { configureStore, ThunkAction, Action, combineReducers, bindActionCreators } from '@reduxjs/toolkit';
 import boardReducer from '../features/board/boardSlice';
 import bagReducer from '../features/bag/bagSlice';
-import handReducer from '../features/hand/handSlice';
 import playersReducer from '../features/player/playersSlice';
 
 
 const combinedReducer = combineReducers({
   board: boardReducer,
   bag: bagReducer,
-  hand: handReducer,
   players: playersReducer,
 })
 
@@ -28,9 +26,7 @@ function crossSliceReducer(state: any, action:any) {
       }
       newstate.bag.tiles = availableTiles;
       console.log(pickedTiles)
-      newstate.hand.tiles.push(...pickedTiles);
-      newstate.players[action.payload.player].tiles.push(...pickedTiles)
-
+      newstate.players.players[action.payload.player].tiles.push(...pickedTiles)
 
       return newstate;
       // {

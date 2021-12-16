@@ -8,6 +8,9 @@ import {
   Heading,
 } from 'rebass'
 
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+
 import './App.css';
 
 function App() {
@@ -16,19 +19,21 @@ function App() {
       <Heading
         p={4}
         width={1}>
-      Words with Crown
+        Letters with Forklifts
       </Heading>
-      <Flex>
-        <Box
-          width={1/4}>
-          <Bag />
-          <Players />
-          <Hand />
-        </Box>
-        <Box>
-        <Board />
-        </Box>
-      </Flex>
+      <DndProvider backend={HTML5Backend}>
+        <Flex>
+          <Box
+            width={1 / 4}>
+            <Bag />
+            <Players />
+            <Hand />
+          </Box>
+          <Box>
+            <Board />
+          </Box>
+        </Flex>
+      </DndProvider>
     </div>
   );
 }

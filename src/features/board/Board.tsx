@@ -36,7 +36,7 @@ export function Board() {
           Board
         </Heading>
         <div className={styles.boardGrid}>
-          {Array.from(board.values()).map(x => {return (<BoardSquare>{x}</BoardSquare>)})}
+          {Array.from(board.values()).map((x, n) => {return (<BoardSquare key={n} position={n} tile={x}></BoardSquare>)})}
         </div>
   </Box>
       </div>

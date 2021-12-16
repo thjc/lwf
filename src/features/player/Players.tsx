@@ -24,7 +24,7 @@ export function Players() {
   return (
     <div>
       Players
-      {Array.from(players).map(x => {return (<Player player={x as PlayerState}></Player>)})}
+      {Array.from(players).map((x, n) => {return (<Player key={n} player={x as PlayerState}></Player>)})}
     </div>
   );
 }

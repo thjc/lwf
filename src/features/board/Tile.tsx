@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDrag } from 'react-dnd'
 
 import {
   Box,
@@ -10,7 +11,7 @@ import {
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  playWord,
+  SquareState,
   selectBoard,
 } from './boardSlice';
 import { getTileValue } from './engine';
@@ -19,11 +20,15 @@ import styles from './Board.module.css';
 export function Tile(props:any) {
   const dispatch = useAppDispatch();
   const board = useAppSelector(selectBoard);
-
+  const tileLetter = props.children;
   return (
-    <div className={styles.tile}>
-      <div className={styles.tileLetter}>{props.children}</div>
-      <div className={styles.tileValue}>{getTileValue(props.children)}</div>
+    <div className={[
+        props.isDragging ? styles.dragTile: "",
+        props.tileType === SquareState.Working ? styles.workingTile: "",
+        styles.tile
+      ].join(" ")}>
+      <div className={styles.tileLetter}>{tileLetter}</div>
+      <div className={styles.tileValue}>{getTileValue(tileLetter)}</div>
     </div>
   );
 }

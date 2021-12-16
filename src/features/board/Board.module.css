@@ -98,6 +98,14 @@
   border-width: 1px;
 }
 
+.dragTile {
+  opacity: 50%;
+}
+
+.workingTile {
+  background-color: orange;
+}
+
 .tileLetter {
   font-size: 8pt;
   text-align: center;
