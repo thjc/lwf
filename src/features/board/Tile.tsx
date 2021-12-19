@@ -11,10 +11,9 @@ import {
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  SquareState,
   selectBoard,
 } from './boardSlice';
-import { getTileValue } from './engine';
+import { getTileValue, SquareState } from './engine';
 import styles from './Board.module.css';
 
 export function Tile(props:any) {

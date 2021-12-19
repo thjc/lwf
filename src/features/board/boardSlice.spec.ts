@@ -1,5 +1,9 @@
 import { boardSlice } from "./boardSlice";
 
+describe('stub', () => {
+  it.todo('test')
+});
+
 // import counterReducer, {
 //   CounterState,
 //   increment,

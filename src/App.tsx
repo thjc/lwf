@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Bag } from './features/bag/Bag';
 import { Board } from './features/board/Board';
 import { Hand } from './features/hand/Hand';

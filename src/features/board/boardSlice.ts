@@ -1,24 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { act } from 'react-dom/test-utils';
 import { RootState, AppThunk } from '../../app/store';
+import { BoardState, boardSize, Square, SquareState } from './engine';
 
-
-export enum SquareState {
-  Empty,
-  Placed,
-  Working,
-  Hand
-}
-export interface Square {
-  value: string;
-  state: SquareState;
-}
-
-export interface BoardState {
-  squares: Square[];
-}
-
-const boardSize = 15;
 
 const initialState: BoardState = {
   squares: Array(boardSize*boardSize).fill({value: ' ', state: SquareState.Empty}),

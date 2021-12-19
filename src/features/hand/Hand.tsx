@@ -19,6 +19,11 @@ import {
 
 import {
   SquareState,
+  isValidPlacement
+} from './../board/engine';
+
+import {
+  selectBoard,
 } from './../board/boardSlice';
 
 import { BoardSquare } from '../board/BoardSquare';
@@ -28,8 +33,7 @@ import styles from './Hand.module.css';
 export function Hand() {
   const dispatch = useAppDispatch();
   const player = useAppSelector(selectPlayers)[0];
-
-  console.log("Hand", player);
+  const board = useAppSelector(selectBoard);
 
   return (
     <div>
@@ -47,6 +51,16 @@ export function Hand() {
         >
           Pick Tiles
         </button>
+
+        <button
+          className={styles.button}
+          aria-label="Place Tiles"
+          onClick={() => {console.log("Place tiles");}}
+          disabled={!isValidPlacement([...board.values()])}
+        >
+          Place Tiles
+        </button>
+
 
           </Card>
   </Box>

@@ -12,10 +12,11 @@ import {
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
-  SquareState,
   placeWorkingTile,
   selectBoard,
 } from './boardSlice';
+
+import { SquareState } from './engine';
 
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';

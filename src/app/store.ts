@@ -11,7 +11,6 @@ const combinedReducer = combineReducers({
 })
 
 function crossSliceReducer(state: any, action:any) {
-  console.log(action.type)
   switch (action.type) {
     case 'bag/takeTiles': {
       let newstate = JSON.parse(JSON.stringify(state))
@@ -22,10 +21,8 @@ function crossSliceReducer(state: any, action:any) {
         let index = Math.floor(Math.random()*newstate.bag.tiles.length);
         let tileValue = availableTiles.splice(index,1);
         pickedTiles.push(tileValue[0]);
-        console.log(index, tileValue);
       }
       newstate.bag.tiles = availableTiles;
-      console.log(pickedTiles)
       newstate.players.players[action.payload.player].tiles.push(...pickedTiles)
 
       return newstate;

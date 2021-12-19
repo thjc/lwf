@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 
-import { placeWorkingTile, SquareState } from '../board/boardSlice';
+import { placeWorkingTile } from '../board/boardSlice';
+import { SquareState } from '../board/engine';
 
 export interface PlayerState {
   tiles: string[];
