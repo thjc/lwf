@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { act } from 'react-dom/test-utils';
 import { RootState, AppThunk } from '../../app/store';
-import { BoardState, boardSize, Square, SquareState } from './engine';
+import { BoardState, boardSize, Square, SquareState, isValidPlacement, isValidWordSet } from './engine';
 
 
 const initialState: BoardState = {
@@ -34,12 +34,12 @@ export const boardSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+    // play word commits the current working tiles to a played word
     playWord: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      applyWord(state.squares, action.payload.word, action.payload.position, action.payload.direction);
+      if (isValidPlacement(state.squares) && isValidWordSet(state.squares)) {
+        state.squares.forEach((value) => {if (value.state === SquareState.Working) { value.state = SquareState.Placed}})
+        // TODO: Add to score
+      }
     },
     placeWorkingTile: (state, action) => {
       state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};

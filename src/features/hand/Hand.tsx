@@ -23,6 +23,7 @@ import {
 } from './../board/engine';
 
 import {
+  playWord,
   selectBoard,
 } from './../board/boardSlice';
 
@@ -55,7 +56,7 @@ export function Hand() {
         <button
           className={styles.button}
           aria-label="Place Tiles"
-          onClick={() => {console.log("Place tiles");}}
+          onClick={() => {dispatch(playWord({}));}}
           disabled={!isValidPlacement([...board.values()])}
         >
           Place Tiles

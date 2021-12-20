@@ -142,3 +142,7 @@ export function isValidPlacement(squares: Square[]): boolean {
     }
     return result;
 }
+
+export function isValidWordSet(squares: Square[]): boolean {
+    return true;
+}
