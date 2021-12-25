@@ -24,6 +24,7 @@ import {
 
 import {
   playWord,
+  returnTiles,
   selectBoard,
 } from './../board/boardSlice';
 
@@ -55,7 +56,14 @@ export function Hand() {
 
         <button
           className={styles.button}
-          aria-label="Place Tiles"
+          aria-label="Return Tiles"
+          onClick={() => {dispatch(returnTiles({}));}}
+        >
+          Return Tiles
+        </button>
+        <button
+          className={styles.button}
+          aria-label="Play Tiles"
           onClick={() => {dispatch(playWord({}));}}
           disabled={!isValidPlacement([...board.values()])}
         >

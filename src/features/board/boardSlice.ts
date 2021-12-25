@@ -45,10 +45,13 @@ export const boardSlice = createSlice({
         state.squares[action.payload.from] = {value: '', state: SquareState.Empty};
       }
     },
+    returnTiles: (state, action) => {
+      // done in top level stop reducer
+    },
   },
 });
 
-export const { playWord, placeWorkingTile } = boardSlice.actions;
+export const { playWord, placeWorkingTile, returnTiles } = boardSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

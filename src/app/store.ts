@@ -43,12 +43,25 @@ function crossSliceReducer(state: StoreState, action:any) {
       let direction = getDirection(squares);
       if (startPlace !== undefined && isValidPlacement(squares) && isValidWordSet(squares, startPlace[0], startPlace[1], direction)) {
         const score = scoreWords(squares, startPlace[0], startPlace[1], direction);
-        newstate.players.players[0].score += score;
+        newstate.players.players[newstate.players.currentPlayer].score += score;
         newstate.board.squares.forEach((value) => {if (value.state === SquareState.Working) { value.state = SquareState.Placed}})
       }
       return newstate;
     }
+    case 'board/returnTiles': {
+      let newstate : StoreState = JSON.parse(JSON.stringify(state))
 
+
+      newstate.board.squares.forEach(sq => {
+        if (sq.state === SquareState.Working) {
+          newstate.players.players[newstate.players.currentPlayer].tiles.push(sq.value);
+          sq.value = ' ';
+          sq.state = SquareState.Empty;
+        }
+      })
+
+      return newstate;
+    }
     default:
       return state
   }
