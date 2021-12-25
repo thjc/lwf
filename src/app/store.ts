@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action, combineReducers, bindActionCreator
 import boardReducer from '../features/board/boardSlice';
 import bagReducer from '../features/bag/bagSlice';
 import playersReducer from '../features/player/playersSlice';
+import { findStartWorkingTile, getDirection, isValidPlacement, isValidWordSet, scoreWords, SquareState } from '../features/board/engine';
 
 
 const combinedReducer = combineReducers({
@@ -10,7 +11,9 @@ const combinedReducer = combineReducers({
   players: playersReducer,
 })
 
-function crossSliceReducer(state: any, action:any) {
+type StoreState = ReturnType<typeof combinedReducer>;
+
+function crossSliceReducer(state: StoreState, action:any) {
   switch (action.type) {
     case 'bag/takeTiles': {
       let newstate = JSON.parse(JSON.stringify(state))
@@ -32,6 +35,20 @@ function crossSliceReducer(state: any, action:any) {
       //   b: sliceReducerB(state.b, action)
       // }
     }
+    // play word commits the current working tiles to a played word
+    case 'board/playWord': {
+      const squares = state.board.squares;
+      let newstate : StoreState = JSON.parse(JSON.stringify(state))
+      let startPlace = findStartWorkingTile(squares);
+      let direction = getDirection(squares);
+      if (startPlace !== undefined && isValidPlacement(squares) && isValidWordSet(squares, startPlace[0], startPlace[1], direction)) {
+        const score = scoreWords(squares, startPlace[0], startPlace[1], direction);
+        newstate.players.players[0].score += score;
+        newstate.board.squares.forEach((value) => {if (value.state === SquareState.Working) { value.state = SquareState.Placed}})
+      }
+      return newstate;
+    }
+
     default:
       return state
   }

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { act } from 'react-dom/test-utils';
 import { RootState, AppThunk } from '../../app/store';
-import { BoardState, boardSize, Square, SquareState, isValidPlacement, isValidWordSet } from './engine';
+import { BoardState, boardSize, Square, SquareState, isValidPlacement, isValidWordSet, findStartWorkingTile, getDirection, scoreWords } from './engine';
 
 
 const initialState: BoardState = {
@@ -36,10 +36,7 @@ export const boardSlice = createSlice({
   reducers: {
     // play word commits the current working tiles to a played word
     playWord: (state, action) => {
-      if (isValidPlacement(state.squares) && isValidWordSet(state.squares)) {
-        state.squares.forEach((value) => {if (value.state === SquareState.Working) { value.state = SquareState.Placed}})
-        // TODO: Add to score
-      }
+      // done in top level stop reducer
     },
     placeWorkingTile: (state, action) => {
       state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};

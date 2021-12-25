@@ -143,6 +143,64 @@ export function isValidPlacement(squares: Square[]): boolean {
     return result;
 }
 
-export function isValidWordSet(squares: Square[]): boolean {
+export function isValidWord(word: string): boolean {
+    // TODO: Dictionart lookup here
     return true;
+}
+
+export function collectWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): string[] | []{
+    let ret = [getWord(squares, xStart, yStart, direction)];
+
+    const next = (x: number,y: number) => {return direction === WordDirection.Horizontal ? [x+1, y] : [x, y+1]}
+
+    for (let x = xStart, y = yStart;squares[getBoardIndex(x,y)].state !== SquareState.Empty; [x,y] = next(x,y)) {
+        if (squares[getBoardIndex(x,y)].state === SquareState.Working) {
+            const otherDirection = direction === WordDirection.Horizontal ? WordDirection.Vertical : WordDirection.Horizontal;
+            const candidate = getWord(squares, x, y, otherDirection);
+            if (candidate.length > 1)
+            {
+                ret.push(candidate);
+            }
+        }
+    }
+    return ret;
+}
+
+export function getWord(squares: Square[], xStart: number, yStart: number, direction: WordDirection): string {
+    let ret = "";
+    if (direction === WordDirection.Horizontal) {
+        for (; xStart > 0 && squares[getBoardIndex(xStart-1,yStart)].state!==SquareState.Empty; --xStart) {}
+        for (let x = xStart; squares[getBoardIndex(x,yStart)].state!==SquareState.Empty && x < boardSize; ++x) {
+            ret += squares[getBoardIndex(x,yStart)].value;
+        }
+    } else if (direction === WordDirection.Vertical) {
+        for (; yStart > 0 && squares[getBoardIndex(xStart,yStart-1)].state!==SquareState.Empty; --yStart) {}
+        for (let y = yStart; squares[getBoardIndex(xStart,y)].state!==SquareState.Empty && y < boardSize; ++y) {
+            ret += squares[getBoardIndex(xStart,y)].value;
+        }
+    }
+
+    return ret;
+}
+
+export function isValidWordSet(squares: Square[], xStart: number, yStart: number, direction: WordDirection): boolean {
+    let ret = true;
+    const words = collectWords(squares, xStart, yStart, direction);
+    for (let w in words) {
+        ret = ret && isValidWord(w);
+    }
+    return ret;
+}
+
+export function scoreWord(word: string): number {
+    let score = 0;
+    [...word].forEach(l => score += getTileValue(l));
+    return score;
+}
+
+export function scoreWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): number {
+    let ret = 0;
+    const words = collectWords(squares, xStart, yStart, direction);
+    words.forEach(w => ret += scoreWord(w))
+    return ret;
 }

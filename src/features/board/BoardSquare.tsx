@@ -51,7 +51,7 @@ export function BoardSquare(props:any) {
    if (tileValue.state !== SquareState.Empty) {
     return (
       <Box ref={tileValue.state !== SquareState.Placed? drag : undefined}>
-        <Tile isDragging={isDragging} tileType={tileValue.state}>{tileValue.value.toUpperCase()}</Tile>
+        <Tile isDragging={isDragging} tileType={tileValue.state}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
     );
   } else {

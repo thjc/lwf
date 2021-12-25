@@ -45,7 +45,6 @@ export const playersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(placeWorkingTile, (state, action) => {
-      console.log("placeWorkingtiles, plauers", action);
       if (action.payload.value.state === SquareState.Hand) {
         state.players[state.currentPlayer].tiles.splice(action.payload.from,1);
       }
