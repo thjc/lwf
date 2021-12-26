@@ -26,7 +26,7 @@ function crossSliceReducer(state: StoreState, action:any) {
         pickedTiles.push(tileValue[0]);
       }
       newstate.bag.tiles = availableTiles;
-      newstate.players.players[action.payload.player].tiles.push(...pickedTiles)
+      newstate.players.players[state.players.currentPlayer].tiles.push(...pickedTiles)
 
       return newstate;
       // {

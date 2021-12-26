@@ -42,6 +42,9 @@ export const playersSlice = createSlice({
     addTiles: (state, action) => {
       state.players[action.payload.player].tiles += action.payload.tiles
     },
+    nextPlayer: (state, action) => {
+      state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(placeWorkingTile, (state, action) => {
@@ -53,11 +56,11 @@ export const playersSlice = createSlice({
   }
 });
 
-export const { accumulateScore, addTiles } = playersSlice.actions;
+export const { accumulateScore, addTiles, nextPlayer} = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectPlayers = (state: RootState) => state.players.players;
+export const selectPlayers = (state: RootState) => state.players;
 
 export default playersSlice.reducer;

@@ -10,6 +10,7 @@ import {
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
+  nextPlayer,
   selectPlayers
 } from '../player/playersSlice';
 
@@ -34,7 +35,8 @@ import styles from './Hand.module.css';
 
 export function Hand() {
   const dispatch = useAppDispatch();
-  const player = useAppSelector(selectPlayers)[0];
+  const players = useAppSelector(selectPlayers);
+  const player = players.players[players.currentPlayer];
   const board = useAppSelector(selectBoard);
 
   return (
@@ -68,6 +70,13 @@ export function Hand() {
           disabled={!isValidPlacement([...board.values()])}
         >
           Place Tiles
+        </button>
+        <button
+          className={styles.button}
+          aria-label="Next Player"
+          onClick={() => {dispatch(nextPlayer({}));}}
+        >
+          Next Player
         </button>
 
 

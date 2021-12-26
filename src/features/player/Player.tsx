@@ -8,10 +8,13 @@ import {
 } from 'rebass'
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import styles from './Player.module.css';
 
-export function Player(args : {player: PlayerState}) {
+
+export function Player(args : {player: PlayerState, active: boolean}) {
+  console.log("Player", args)
   return (
-    <Card>
+    <Card className={args.active ? styles.activePlayer : ""}>
       <Heading>Player {args.player.username}</Heading>
       Score: {args.player.score}
     </Card>

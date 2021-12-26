@@ -15,7 +15,6 @@ import {
   PlayerState,
   selectPlayers
 } from './playersSlice';
-import styles from './Player.module.css';
 
 export function Players() {
   const dispatch = useAppDispatch();
@@ -24,7 +23,7 @@ export function Players() {
   return (
     <div>
       Players
-      {Array.from(players).map((x, n) => {return (<Player key={n} player={x as PlayerState}></Player>)})}
+      {Array.from(players.players).map((x, n) => {console.log(n, x, players.currentPlayer); return (<Player key={n} active={n === players.currentPlayer} player={x as PlayerState}></Player>)})}
     </div>
   );
 }
