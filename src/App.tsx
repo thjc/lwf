@@ -14,6 +14,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import './App.css';
+import { GameManager } from './features/board/GameManager';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         width={1}>
         Letters with Forklifts
       </Heading>
+      <GameManager />
       <DndProvider backend={HTML5Backend}>
         <Flex>
           <Box

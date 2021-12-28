@@ -39,7 +39,7 @@ export function Hand() {
   const player = players.players[players.currentPlayer];
   const board = useAppSelector(selectBoard);
 
-  return (
+  return players.currentPlayer < 0 ? (<div></div>) : (
     <div>
       <div className={styles.row}>
         <Box>
@@ -51,7 +51,7 @@ export function Hand() {
           <button
           className={styles.button}
           aria-label="Pick Tiles"
-          onClick={() => dispatch(takeTiles({player:0, count: (7-player.tiles.length)}))}
+          onClick={() => dispatch(takeTiles({count: (7-player.tiles.length)}))}
         >
           Pick Tiles
         </button>
@@ -74,7 +74,7 @@ export function Hand() {
         <button
           className={styles.button}
           aria-label="Next Player"
-          onClick={() => {dispatch(nextPlayer({}));}}
+          onClick={() => {dispatch(nextPlayer());}}
         >
           Next Player
         </button>

@@ -13,9 +13,11 @@ export interface PlayerState {
 
 const initialState : {
   currentPlayer: number;
+  username: string;
   players: PlayerState[];
 } = {
-  currentPlayer: 0,
+  currentPlayer: -1,
+  username: '',
   players: [
   {
     tiles: [],
@@ -42,9 +44,19 @@ export const playersSlice = createSlice({
     addTiles: (state, action) => {
       state.players[action.payload.player].tiles += action.payload.tiles
     },
-    nextPlayer: (state, action) => {
+    nextPlayer: (state) => {
       state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
     },
+    login: (state, action) => {
+      state.username = action.payload.username;
+      state.currentPlayer = -1;
+      state.players.forEach((v,n) => {if (v.username === state.username) { state.currentPlayer = n; }})
+    },
+    logout: (state) => {
+      state.username = '';
+      state.currentPlayer = -1;
+    },
+
   },
   extraReducers: (builder) => {
     builder.addCase(placeWorkingTile, (state, action) => {
@@ -56,7 +68,7 @@ export const playersSlice = createSlice({
   }
 });
 
-export const { accumulateScore, addTiles, nextPlayer} = playersSlice.actions;
+export const { accumulateScore, addTiles, nextPlayer, login, logout} = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
