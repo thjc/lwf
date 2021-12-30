@@ -8,6 +8,7 @@ import {
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   nextPlayer,
+  PlayerState,
   selectPlayers
 } from '../player/playersSlice';
 
@@ -32,11 +33,17 @@ import styles from './Hand.module.css';
 
 export function Hand() {
   const dispatch = useAppDispatch();
-  const players = useAppSelector(selectPlayers);
-  const player = players.players[players.currentPlayer];
   const board = useAppSelector(selectBoard);
+  const players = useAppSelector(selectPlayers);
+  let player : PlayerState | undefined = undefined;
+  let isCurrentPlayer = false;
+  if (players.players.length > 0 && players.currentPlayer >= 0) {
+    player = players.players[players.currentPlayer];
+    isCurrentPlayer = player ? players.username === player.username : false;
+    console.log(player, isCurrentPlayer)
+  }
 
-  return players.currentPlayer < 0 ? (<div></div>) : (
+  return player === undefined || !isCurrentPlayer ? (<div>Waiting for turn</div>) : (
     <div>
       <div className={styles.row}>
         <Box>
@@ -48,7 +55,7 @@ export function Hand() {
           <button
           className={styles.button}
           aria-label="Pick Tiles"
-          onClick={() => dispatch(takeTiles({count: (7-player.tiles.length)}))}
+          onClick={() => dispatch(takeTiles({count: (7-(player as PlayerState).tiles.length)}))}
         >
           Pick Tiles
         </button>

@@ -15,7 +15,7 @@ const initialState : {
   username: string;
   players: PlayerState[];
 } = {
-  currentPlayer: -1,
+  currentPlayer: 0,
   username: '',
   players: [
   {
@@ -49,12 +49,13 @@ export const playersSlice = createSlice({
     },
     login: (state, action) => {
       state.username = action.payload.username;
-      state.currentPlayer = -1;
-      state.players.forEach((v,n) => {if (v.username === state.username) { state.currentPlayer = n; }})
+      // TODO: Decide if 'current player' is always the logged in user
+      // state.currentPlayer = -1;
+      // state.players.forEach((v,n) => {if (v.username === state.username) { state.currentPlayer = n; }})
     },
     logout: (state) => {
       state.username = '';
-      state.currentPlayer = -1;
+      //state.currentPlayer = -1;
     },
 
   },

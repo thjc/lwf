@@ -29,11 +29,7 @@ function crossSliceReducer(state: StoreState, action:any) {
       newstate.players.players[state.players.currentPlayer].tiles.push(...pickedTiles)
 
       return newstate;
-      // {
-      //   // specifically pass state.b as an additional argument
-      //   a: handleSpecialCaseForA(state.a, action, state.b),
-      //   b: sliceReducerB(state.b, action)
-      // }
+
     }
     // play word commits the current working tiles to a played word
     case 'board/playWord': {
@@ -50,7 +46,6 @@ function crossSliceReducer(state: StoreState, action:any) {
     }
     case 'board/returnTiles': {
       let newstate : StoreState = JSON.parse(JSON.stringify(state))
-
 
       newstate.board.squares.forEach(sq => {
         if (sq.state === SquareState.Working) {
