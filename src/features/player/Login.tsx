@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
 
-//import { login, PlayerState } from './playersSlice';
-
-/*import {
-  Card,
-  Heading,
-} from 'rebass'
-*/
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import styles from './Player.module.css';
 import { login, logout } from './playersSlice';
 
 interface LoginProps {
   isLoggedIn: boolean;
-}
-
-interface LoginState {
-  username: string;
 }
 
 export function Login(props : LoginProps) {

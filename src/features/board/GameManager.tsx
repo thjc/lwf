@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Box,
   Card,
-  Heading,
 } from 'rebass'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { Login } from '../player/Login';
-import { selectPlayers } from '../player/playersSlice';
+import { joinGame, selectPlayers } from '../player/playersSlice';
 import styles from './Board.module.css';
+import { newGame } from './boardSlice';
 
 
 export function GameManager() {
   const players = useAppSelector(selectPlayers);
+  const dispatch = useAppDispatch();
+  const isLoggedIn = players.username !== '';
 
   return (
     <Box>
       <Card>
-        <Login isLoggedIn={players.username !== ''}/>
+        <Login isLoggedIn={isLoggedIn}/>
         <button
           className={styles.button}
           aria-label="Load Game"
@@ -29,9 +31,17 @@ export function GameManager() {
         <button
           className={styles.button}
           aria-label="New Game"
-          onClick={() => console.log("New Game")}
+          onClick={() => dispatch(newGame())}
         >
           New Game
+        </button>
+        <button
+          className={styles.button}
+          aria-label="Join Game"
+          onClick={() => dispatch(joinGame())}
+          disabled={!isLoggedIn}
+        >
+          Join Game
         </button>
       </Card>
     </Box>

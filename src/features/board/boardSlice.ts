@@ -1,33 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { act } from 'react-dom/test-utils';
-import { RootState, AppThunk } from '../../app/store';
-import { BoardState, boardSize, Square, SquareState, isValidPlacement, isValidWordSet, findStartWorkingTile, getDirection, scoreWords } from './engine';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import { BoardState, boardSize, SquareState } from './engine';
 
 
 const initialState: BoardState = {
   squares: Array(boardSize*boardSize).fill({value: ' ', state: SquareState.Empty}),
 };
-
-const applyWord = (values: Square[], word: string[], place: number[], direction: string) => {
-  let x = place[0];
-  let y = place[1];
-  for (let letter of word) {
-    values[x + y*boardSize] = {value: letter, state: SquareState.Placed};
-    if (direction.indexOf('W') >= 0) {
-      x -= 1;
-    }
-    else if (direction.indexOf('E') >= 0) {
-      x += 1;
-    }
-    if (direction.indexOf('S') >= 0) {
-      y -= 1;
-    }
-    else if (direction.indexOf('N') >= 0) {
-      y -= 1;
-    }
-  }
-}
-
 
 export const boardSlice = createSlice({
   name: 'board',
@@ -45,13 +23,16 @@ export const boardSlice = createSlice({
         state.squares[action.payload.from] = {value: '', state: SquareState.Empty};
       }
     },
+    newGame: (state) => {
+      state.squares = initialState.squares;
+    },
     returnTiles: (state, action) => {
       // done in top level stop reducer
     },
   },
 });
 
-export const { playWord, placeWorkingTile, returnTiles } = boardSlice.actions;
+export const { playWord, placeWorkingTile, newGame, returnTiles } = boardSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

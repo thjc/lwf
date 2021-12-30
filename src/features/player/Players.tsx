@@ -1,23 +1,14 @@
-import React, { useState } from 'react';
-
-import {
-  Box,
-  Card,
-  Image,
-  Heading,
-  Text
-} from 'rebass'
+import React from 'react';
 
 import { Player } from './Player'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import {
   PlayerState,
   selectPlayers
 } from './playersSlice';
 
 export function Players() {
-  const dispatch = useAppDispatch();
   const players = useAppSelector(selectPlayers);
 
   return (

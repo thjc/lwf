@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   Box,
-  Card,
-  Image,
   Heading,
-  Text
 } from 'rebass'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
 import {
-  takeTiles,
   selectBag
 } from './bagSlice';
 import styles from './Bag.module.css';
 
 export function Bag() {
-  const dispatch = useAppDispatch();
   const bag = useAppSelector(selectBag);
 
   return (

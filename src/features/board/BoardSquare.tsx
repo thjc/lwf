@@ -1,19 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
 import { Tile } from './Tile';
 
 import {
   Box,
-  Card,
-  Image,
-  Heading,
-  Text
 } from 'rebass'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks';
 import {
   placeWorkingTile,
-  selectBoard,
 } from './boardSlice';
 
 import { SquareState } from './engine';
@@ -23,7 +18,6 @@ import { useDrag, useDrop } from 'react-dnd';
 
 export function BoardSquare(props:any) {
   const dispatch = useAppDispatch();
-  const board = useAppSelector(selectBoard);
 
   const tileValue = props.tile;
 

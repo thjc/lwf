@@ -1,5 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import { newGame } from '../board/boardSlice';
 
 export interface BagState {
   tiles: string[];
@@ -44,13 +45,14 @@ export const bagSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     takeTiles: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      // applyWord(state.value, action.payload.word, action.payload.position, action.payload.direction);
+      // Done in top level store scope
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(newGame, (state) => {
+      return initialState;
+    });
+  }
 });
 
 export const { takeTiles } = bagSlice.actions;

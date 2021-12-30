@@ -1,4 +1,4 @@
-import { configureStore, ThunkAction, Action, combineReducers, bindActionCreators } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import boardReducer from '../features/board/boardSlice';
 import bagReducer from '../features/bag/bagSlice';
 import playersReducer from '../features/player/playersSlice';

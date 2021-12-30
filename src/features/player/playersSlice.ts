@@ -1,13 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 
-import { placeWorkingTile } from '../board/boardSlice';
+import { newGame, placeWorkingTile } from '../board/boardSlice';
 import { SquareState } from '../board/engine';
 
 export interface PlayerState {
   tiles: string[];
   score: number;
-  playerNumber: number;
   username: string;
 }
 
@@ -22,13 +21,11 @@ const initialState : {
   {
     tiles: [],
     score: 0,
-    playerNumber: 0,
     username: "TSP",
   },
   {
     tiles: [],
     score: 0,
-    playerNumber: 1,
     username: "SP",
   }
 ]};
@@ -47,6 +44,9 @@ export const playersSlice = createSlice({
     nextPlayer: (state) => {
       state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
     },
+    joinGame: (state) => {
+      state.players.push({username: state.username, score: 0, tiles: []})
+    },
     login: (state, action) => {
       state.username = action.payload.username;
       state.currentPlayer = -1;
@@ -64,11 +64,16 @@ export const playersSlice = createSlice({
         state.players[state.currentPlayer].tiles.splice(action.payload.from,1);
       }
       return state;
-    })
+    });
+    builder.addCase(newGame, (state) => {
+      state.players = [{username: state.username, score: 0, tiles: []}]
+      state.currentPlayer = 0;
+      return state;
+    });
   }
 });
 
-export const { accumulateScore, addTiles, nextPlayer, login, logout} = playersSlice.actions;
+export const { accumulateScore, addTiles, nextPlayer, joinGame, login, logout} = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
