@@ -12,9 +12,12 @@ export const boardSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+    loadGame: (state, action) => {
+      // done in top level store reducer
+    },
     // play word commits the current working tiles to a played word
     playWord: (state, action) => {
-      // done in top level stop reducer
+      // done in top level store reducer
     },
     placeWorkingTile: (state, action) => {
       state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};
@@ -32,7 +35,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { playWord, placeWorkingTile, newGame, returnTiles } = boardSlice.actions;
+export const { loadGame, playWord, placeWorkingTile, newGame, returnTiles } = boardSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

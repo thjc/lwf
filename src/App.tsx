@@ -15,6 +15,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import './App.css';
 import { GameManager } from './features/board/GameManager';
+import { GameLink } from './features/gameLink/GameLink';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           </Box>
         </Flex>
       </DndProvider>
+      <GameLink></GameLink>
     </div>
   );
 }

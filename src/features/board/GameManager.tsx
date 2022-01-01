@@ -23,13 +23,6 @@ export function GameManager() {
         <Login isLoggedIn={isLoggedIn}/>
         <button
           className={styles.button}
-          aria-label="Load Game"
-          onClick={() => console.log("Load Game")}
-        >
-          Load Game
-        </button>
-        <button
-          className={styles.button}
           aria-label="New Game"
           onClick={() => dispatch(newGame())}
         >

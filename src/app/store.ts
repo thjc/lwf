@@ -57,6 +57,10 @@ function crossSliceReducer(state: StoreState, action:any) {
 
       return newstate;
     }
+    case 'board/loadGame': {
+      console.log(action)
+      return action.payload;
+    }
     default:
       return state
   }

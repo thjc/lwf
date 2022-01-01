@@ -1,0 +1,6 @@
+.handGrid {
+    display: grid;
+    grid-template-columns: 22px 22px 22px 22px 22px 22px 22px;
+    grid-template-rows: 22px;
+    grid-auto-flow: row;
+  }
