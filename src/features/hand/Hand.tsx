@@ -40,7 +40,6 @@ export function Hand() {
   if (players.players.length > 0 && players.currentPlayer >= 0) {
     player = players.players[players.currentPlayer];
     isCurrentPlayer = player ? players.username === player.username : false;
-    console.log(player, isCurrentPlayer)
   }
 
   return player === undefined || !isCurrentPlayer ? (<div>Waiting for turn</div>) : (
