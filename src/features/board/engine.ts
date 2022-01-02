@@ -63,6 +63,34 @@ export function getBoardIndex(x: number, y: number) : number {
     return x + y*boardSize;
 }
 
+export enum SquareType {
+    Plain, // letters are not only in one direction
+    DoubleLetter,
+    TripleLetter,
+    DoubleWord,
+    TripleWord
+}
+
+export function getSquareType(x: number, y: number) : SquareType {
+    const wrap = (v : number) => v > 7 ? (14 - v) : v;
+    const wx = wrap(x);
+    const wy = wrap(y);
+    const compare = (v : number[]) => v[0] === wx && v[1] === wy;
+    if ([[0,0],[0,7],[7,0]].findIndex(compare) >= 0) {
+        return SquareType.TripleWord;
+    } else if ([[5,1],[1,5],[5,5]].findIndex(compare) >= 0) {
+        return SquareType.TripleLetter;
+    } else if ([[0,3],[3,0],[6,2],[2,6],[6,6],[3,7],[7,3]].findIndex(compare) >= 0) {
+        return SquareType.DoubleLetter;
+    } else if (wx === wy) {
+        return SquareType.DoubleWord;
+    } else {
+        return SquareType.Plain;
+    }
+}
+
+
+
 export function findStartWorkingTile(squares: Square[]) : [number, number] | undefined
 {
     for (let x = 0; x < boardSize; ++x) {

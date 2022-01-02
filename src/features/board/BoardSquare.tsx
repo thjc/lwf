@@ -11,7 +11,7 @@ import {
   placeWorkingTile,
 } from './boardSlice';
 
-import { SquareState } from './engine';
+import { boardSize, getSquareType, SquareState, SquareType } from './engine';
 
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';
@@ -44,11 +44,21 @@ export function BoardSquare(props:any) {
 
    if (tileValue.state !== SquareState.Empty) {
     return (
-      <Box ref={tileValue.state !== SquareState.Placed? drag : undefined}>
+      <Box ref={tileValue.state !== SquareState.Placed ? drag : undefined}>
         <Tile isDragging={isDragging} tileType={tileValue.state}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
     );
   } else {
-    return (<Box ref={drop} className={styles.boardSquare}></Box>)
+    const type = getSquareType(props.position % boardSize, Math.floor(props.position/boardSize));
+    const style = ((v : SquareType) => {
+      switch (v) {
+        case(SquareType.Plain): { return styles.boardSquare }
+        case(SquareType.TripleWord): { return styles.boardTripleWord }
+        case(SquareType.TripleLetter): { return styles.boardTripleLetter }
+        case(SquareType.DoubleWord): { return styles.boardDoubleWord }
+        case(SquareType.DoubleLetter): { return styles.boardDoubleLetter }
+      }
+    })(type);
+    return (<Box ref={drop} className={style}></Box>)
   }
 }

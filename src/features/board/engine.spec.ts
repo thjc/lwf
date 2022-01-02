@@ -1,4 +1,4 @@
-import { boardSize, getBoardIndex, getDirection, getWord, hasNoGaps, findStartWorkingTile, WordDirection, Square, SquareState, collectWords } from './engine'
+import { boardSize, getBoardIndex, getDirection, getWord, hasNoGaps, findStartWorkingTile, WordDirection, Square, SquareState, collectWords, getSquareType, SquareType } from './engine'
 
 function makeTestSquares(input : string[]) : Square[] {
     Array.from({length: 6}, e => Array(12).fill(0));
@@ -110,6 +110,15 @@ describe('tile validaton', () => {
         expect(collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jeSt"]), 0, 4, WordDirection.Horizontal)).toEqual(["JEST"]);
         expect(collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jest"]), 0, 4, WordDirection.Horizontal)).toEqual(["JEST", "TESTS"]);
     });
+});
 
-
+describe('square type', () => {
+    it('getSquareType', () => {
+        expect(getSquareType(0,0)).toEqual(SquareType.TripleWord);
+        expect(getSquareType(14,14)).toEqual(SquareType.TripleWord);
+        expect(getSquareType(7,7)).toEqual(SquareType.DoubleWord);
+        expect(getSquareType(10,4)).toEqual(SquareType.DoubleWord);
+        expect(getSquareType(3,14)).toEqual(SquareType.DoubleLetter);
+        expect(getSquareType(1,9)).toEqual(SquareType.TripleLetter);
+    });
 });
