@@ -1,3 +1,5 @@
+import { TupleType } from "typescript";
+
 interface tileValue {
     [key: string]: number;
 }
@@ -63,6 +65,10 @@ export function getBoardIndex(x: number, y: number) : number {
     return x + y*boardSize;
 }
 
+export function getBoardCoordinates(index: number) : [number, number] {
+    return [index % boardSize, Math.floor(index/boardSize)];
+}
+
 export enum SquareType {
     Plain, // letters are not only in one direction
     DoubleLetter,
@@ -88,8 +94,6 @@ export function getSquareType(x: number, y: number) : SquareType {
         return SquareType.Plain;
     }
 }
-
-
 
 export function findStartWorkingTile(squares: Square[]) : [number, number] | undefined
 {
@@ -176,7 +180,13 @@ export function isValidWord(word: string): boolean {
     return true;
 }
 
-export function collectWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): string[] | []{
+export interface placedLetter {
+    letter: string;
+    letterMultiplier: number;
+    wordMultiplier: number;
+}
+
+export function collectWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): placedLetter[][] | []{
     let ret = [getWord(squares, xStart, yStart, direction)];
 
     const next = (x: number,y: number) => {return direction === WordDirection.Horizontal ? [x+1, y] : [x, y+1]}
@@ -194,17 +204,41 @@ export function collectWords(squares: Square[], xStart: number, yStart: number, 
     return ret;
 }
 
-export function getWord(squares: Square[], xStart: number, yStart: number, direction: WordDirection): string {
-    let ret = "";
+function getPlacedLetterInfo(s: Square, x: number, y: number) : placedLetter {
+
+    const ret : placedLetter = {
+        letter: s.value,
+        letterMultiplier: 1,
+        wordMultiplier: 1,
+    }
+
+    if (s.state === SquareState.Working) {
+        const type = getSquareType(x,y);
+        if (type === SquareType.TripleLetter) {
+            ret.letterMultiplier = 3;
+        } else if (type === SquareType.DoubleLetter) {
+            ret.letterMultiplier = 2;
+        } else if (type === SquareType.TripleWord) {
+            ret.wordMultiplier = 3;
+        } else if (type === SquareType.DoubleWord) {
+            ret.wordMultiplier = 2;
+        }
+    }
+
+    return ret;
+}
+
+export function getWord(squares: Square[], xStart: number, yStart: number, direction: WordDirection): placedLetter[] | [] {
+    let ret : placedLetter[] = []
     if (direction === WordDirection.Horizontal) {
         for (; xStart > 0 && squares[getBoardIndex(xStart-1,yStart)].state!==SquareState.Empty; --xStart) {}
         for (let x = xStart; squares[getBoardIndex(x,yStart)].state!==SquareState.Empty && x < boardSize; ++x) {
-            ret += squares[getBoardIndex(x,yStart)].value;
+            ret.push(getPlacedLetterInfo(squares[getBoardIndex(x,yStart)], x, yStart));
         }
     } else if (direction === WordDirection.Vertical) {
         for (; yStart > 0 && squares[getBoardIndex(xStart,yStart-1)].state!==SquareState.Empty; --yStart) {}
         for (let y = yStart; squares[getBoardIndex(xStart,y)].state!==SquareState.Empty && y < boardSize; ++y) {
-            ret += squares[getBoardIndex(xStart,y)].value;
+            ret.push(getPlacedLetterInfo(squares[getBoardIndex(xStart,y)], xStart, y));
         }
     }
 
@@ -220,10 +254,11 @@ export function isValidWordSet(squares: Square[], xStart: number, yStart: number
     return ret;
 }
 
-export function scoreWord(word: string): number {
+export function scoreWord(word: placedLetter[]): number {
     let score = 0;
-    [...word].forEach(l => score += getTileValue(l));
-    return score;
+    let wordMultiplier = 1;
+    [...word].forEach(l => {score += getTileValue(l.letter) * l.letterMultiplier; wordMultiplier *= l.wordMultiplier});
+    return score * wordMultiplier;
 }
 
 export function scoreWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): number {

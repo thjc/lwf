@@ -1,4 +1,4 @@
-import { boardSize, getBoardIndex, getDirection, getWord, hasNoGaps, findStartWorkingTile, WordDirection, Square, SquareState, collectWords, getSquareType, SquareType } from './engine'
+import { boardSize, getBoardIndex, getDirection, getWord, hasNoGaps, findStartWorkingTile, WordDirection, Square, SquareState, collectWords, getSquareType, SquareType, placedLetter } from './engine'
 
 function makeTestSquares(input : string[]) : Square[] {
     Array.from({length: 6}, e => Array(12).fill(0));
@@ -96,19 +96,39 @@ describe('tile validaton', () => {
 });
 
 describe('tile validaton', () => {
+    const extractWord = (n : placedLetter) => n.letter;
     it('getWord', () => {
-        expect(getWord(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal)).toEqual("TEST");
-        expect(getWord(makeTestSquares(["Test"]), 1, 0, WordDirection.Horizontal)).toEqual("TEST");
-        expect(getWord(makeTestSquares(["","Test"]), 1, 1, WordDirection.Horizontal)).toEqual("TEST");
-        expect(getWord(makeTestSquares([" T"," e", " s", " T"]), 1, 1, WordDirection.Vertical)).toEqual("TEST");
-        expect(getWord(makeTestSquares(["  T","  E", "jeSt", "  T"]), 0, 2, WordDirection.Horizontal)).toEqual("JEST");
+        expect((getWord(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((getWord(makeTestSquares(["Test"]), 1, 0, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((getWord(makeTestSquares(["","Test"]), 1, 1, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((getWord(makeTestSquares([" T"," e", " s", " T"]), 1, 1, WordDirection.Vertical) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((getWord(makeTestSquares(["  T","  E", "jeSt", "  T"]), 0, 2, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("JEST");
     });
 
+    const extractWords = (v: placedLetter[]) : string => v.map(extractWord).join("");
     it('collectWords', () => {
-        expect(collectWords(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal)).toEqual(["TEST"]);
-        expect(collectWords(makeTestSquares(["Test"]), 1, 0, WordDirection.Horizontal)).toEqual(["TEST"]);
-        expect(collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jeSt"]), 0, 4, WordDirection.Horizontal)).toEqual(["JEST"]);
-        expect(collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jest"]), 0, 4, WordDirection.Horizontal)).toEqual(["JEST", "TESTS"]);
+        expect((collectWords(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal) as placedLetter[][])
+            .map(extractWords))
+            .toEqual(["TEST"]);
+        expect((collectWords(makeTestSquares(["Test"]), 1, 0, WordDirection.Horizontal) as placedLetter[][])
+            .map(extractWords))
+            .toEqual(["TEST"]);
+        expect((collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jeSt"]), 0, 4, WordDirection.Horizontal)  as placedLetter[][])
+            .map(extractWords))
+            .toEqual(["JEST"]);
+        expect((collectWords(makeTestSquares(["  T","  E", "  S", "  T", "jest"]), 0, 4, WordDirection.Horizontal) as placedLetter[][])
+            .map(extractWords))
+            .toEqual(["JEST", "TESTS"]);
     });
 });
 

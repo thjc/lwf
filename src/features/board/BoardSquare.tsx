@@ -11,7 +11,7 @@ import {
   placeWorkingTile,
 } from './boardSlice';
 
-import { boardSize, getSquareType, SquareState, SquareType } from './engine';
+import { boardSize, getBoardCoordinates, getSquareType, SquareState, SquareType } from './engine';
 
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';
@@ -49,7 +49,7 @@ export function BoardSquare(props:any) {
       </Box>
     );
   } else {
-    const type = getSquareType(props.position % boardSize, Math.floor(props.position/boardSize));
+    const type = getSquareType(...getBoardCoordinates(props.position));
     const style = ((v : SquareType) => {
       switch (v) {
         case(SquareType.Plain): { return styles.boardSquare }
