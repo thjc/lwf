@@ -160,22 +160,52 @@ export function hasNoGaps(squares: Square[], xStart: number, yStart: number, dir
     return valid;
 }
 
+export function containsTile(squares: Square[], startX : number, startY: number, direction: WordDirection, testX: number, testY: number)
+{
+    let x = startX;
+    let y = startY;
+    while(true) {
+        if (direction === WordDirection.Horizontal) {
+            x += 1;
+        } else {
+            y += 1;
+        }
+        const tile = squares[getBoardIndex(x,y)];
+        if (tile.state === SquareState.Empty) {
+            return false;
+        } else if (x === testX && y === testY) {
+            return true;
+        }
+    }
+}
+
 export function isValidPlacement(squares: Square[]): boolean {
-    let result = false;
+    const firstTurn = squares.reduce((acc, v) => acc && v.state !== SquareState.Placed, true);
+    let noGaps = false;
     // find the first new tile
     const firstWorking = findStartWorkingTile(squares);
+    let containsCentre = false;
+
+    let allNewLetters = true;
+    const checkAllNewLetters = (v : placedLetter) => {allNewLetters = allNewLetters && v.newLetter};
 
     // then work out direction of tiles
     if (firstWorking !== undefined) {
         let direction = getDirection(squares);
         if (direction !== WordDirection.Invalid) {
-            result = hasNoGaps(squares, firstWorking[0], firstWorking[1], direction);
+            noGaps = hasNoGaps(squares, firstWorking[0], firstWorking[1], direction);
         }
+        const words = collectWords(squares, firstWorking[0], firstWorking[1], direction);
+        for (let w of words) {
+            w.forEach(checkAllNewLetters);
+        }
+        containsCentre ||= containsTile(squares, firstWorking[0], firstWorking[1], direction, 7, 7);
     }
-    return result;
+
+    return noGaps && (firstTurn || !allNewLetters) && (!firstTurn || containsCentre);
 }
 
-export function isValidWord(word: string): boolean {
+export function isValidWord(word: placedLetter[]): boolean {
     // TODO: Dictionart lookup here
     return true;
 }
@@ -184,9 +214,10 @@ export interface placedLetter {
     letter: string;
     letterMultiplier: number;
     wordMultiplier: number;
+    newLetter: boolean;
 }
 
-export function collectWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): placedLetter[][] | []{
+export function collectWords(squares: Square[], xStart: number, yStart: number, direction: WordDirection): placedLetter[][] {
     let ret = [getWord(squares, xStart, yStart, direction)];
 
     const next = (x: number,y: number) => {return direction === WordDirection.Horizontal ? [x+1, y] : [x, y+1]}
@@ -210,9 +241,11 @@ function getPlacedLetterInfo(s: Square, x: number, y: number) : placedLetter {
         letter: s.value,
         letterMultiplier: 1,
         wordMultiplier: 1,
+        newLetter: false,
     }
 
     if (s.state === SquareState.Working) {
+        ret.newLetter = true;
         const type = getSquareType(x,y);
         if (type === SquareType.TripleLetter) {
             ret.letterMultiplier = 3;
@@ -248,7 +281,7 @@ export function getWord(squares: Square[], xStart: number, yStart: number, direc
 export function isValidWordSet(squares: Square[], xStart: number, yStart: number, direction: WordDirection): boolean {
     let ret = true;
     const words = collectWords(squares, xStart, yStart, direction);
-    for (let w in words) {
+    for (let w of words) {
         ret = ret && isValidWord(w);
     }
     return ret;
