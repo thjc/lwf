@@ -44,7 +44,7 @@ export const bagSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    takeTiles: (state, action) => {
+    takeTiles: (state) => {
       // Done in top level store scope
     },
   },

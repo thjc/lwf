@@ -51,14 +51,6 @@ export function Hand() {
           {Array.from(player.tiles.values()).map((x,n) => {return (<BoardSquare key={n} position={n} tile={ {value: x, state: SquareState.Hand} }></BoardSquare>)})}
         </div>
 
-          <button
-          className={styles.button}
-          aria-label="Pick Tiles"
-          onClick={() => dispatch(takeTiles({count: (7-(player as PlayerState).tiles.length)}))}
-        >
-          Pick Tiles
-        </button>
-
         <button
           className={styles.button}
           aria-label="Return Tiles"
@@ -69,17 +61,17 @@ export function Hand() {
         <button
           className={styles.button}
           aria-label="Play Tiles"
-          onClick={() => {dispatch(playWord({}));}}
+          onClick={() => {dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer())}}
           disabled={!isValidPlacement([...board.values()])}
         >
           Place Tiles
         </button>
         <button
           className={styles.button}
-          aria-label="Next Player"
+          aria-label="Pass"
           onClick={() => {dispatch(nextPlayer());}}
         >
-          Next Player
+          Pass
         </button>
 
 

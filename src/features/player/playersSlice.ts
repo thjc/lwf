@@ -12,23 +12,14 @@ export interface PlayerState {
 
 const initialState : {
   currentPlayer: number;
+  loggedInPlayer: number;
   username: string;
   players: PlayerState[];
 } = {
   currentPlayer: 0,
+  loggedInPlayer: -1,
   username: '',
-  players: [
-  {
-    tiles: [],
-    score: 0,
-    username: "TSP",
-  },
-  {
-    tiles: [],
-    score: 0,
-    username: "SP",
-  }
-]};
+  players: []};
 
 export const playersSlice = createSlice({
   name: 'player',
@@ -45,17 +36,16 @@ export const playersSlice = createSlice({
       state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
     },
     joinGame: (state) => {
-      state.players.push({username: state.username, score: 0, tiles: []})
+      const playerCount = state.players.push({username: state.username, score: 0, tiles: []});
+      state.loggedInPlayer = playerCount - 1;
     },
     login: (state, action) => {
       state.username = action.payload.username;
-      // TODO: Decide if 'current player' is always the logged in user
-      // state.currentPlayer = -1;
-      // state.players.forEach((v,n) => {if (v.username === state.username) { state.currentPlayer = n; }})
+      state.players.forEach((element, index) => {if (element.username === state.username) {state.loggedInPlayer = index};});
     },
     logout: (state) => {
       state.username = '';
-      //state.currentPlayer = -1;
+      state.loggedInPlayer = -1;
     },
 
   },
@@ -69,6 +59,7 @@ export const playersSlice = createSlice({
     builder.addCase(newGame, (state) => {
       state.players = [{username: state.username, score: 0, tiles: []}]
       state.currentPlayer = 0;
+      state.loggedInPlayer = 0;
       return state;
     });
   }

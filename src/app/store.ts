@@ -19,17 +19,17 @@ function crossSliceReducer(state: StoreState, action:any) {
       let newstate = JSON.parse(JSON.stringify(state))
       let availableTiles = [...newstate.bag.tiles];
       let pickedTiles = [];
-      for (let ii = 0; ii < action.payload.count && availableTiles.length > 0; ++ii)
+      const count = 7-state.players.players[state.players.loggedInPlayer].tiles.length;
+      for (let ii = 0; ii < count && availableTiles.length > 0; ++ii)
       {
         let index = Math.floor(Math.random()*newstate.bag.tiles.length);
         let tileValue = availableTiles.splice(index,1);
         pickedTiles.push(tileValue[0]);
       }
       newstate.bag.tiles = availableTiles;
-      newstate.players.players[state.players.currentPlayer].tiles.push(...pickedTiles)
+      newstate.players.players[state.players.loggedInPlayer].tiles.push(...pickedTiles)
 
       return newstate;
-
     }
     // play word commits the current working tiles to a played word
     case 'board/playWord': {
