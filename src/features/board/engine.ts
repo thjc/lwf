@@ -165,16 +165,17 @@ export function containsTile(squares: Square[], startX : number, startY: number,
     let x = startX;
     let y = startY;
     while(true) {
-        if (direction === WordDirection.Horizontal) {
-            x += 1;
-        } else {
-            y += 1;
-        }
         const tile = squares[getBoardIndex(x,y)];
         if (tile.state === SquareState.Empty) {
             return false;
         } else if (x === testX && y === testY) {
             return true;
+        }
+
+        if (direction === WordDirection.Horizontal) {
+            x += 1;
+        } else {
+            y += 1;
         }
     }
 }
