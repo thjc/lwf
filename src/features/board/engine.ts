@@ -168,7 +168,7 @@ export function containsTile(squares: Square[], startX : number, startY: number,
 {
     let x = startX;
     let y = startY;
-    while(true) {
+    while(x < boardSize && y < boardSize) {
         const tile = squares[getBoardIndex(x,y)];
         if (tile.state === SquareState.Empty) {
             return false;
@@ -182,6 +182,7 @@ export function containsTile(squares: Square[], startX : number, startY: number,
             y += 1;
         }
     }
+    return false;
 }
 
 export function isValidPlacement(squares: Square[]): boolean {
@@ -227,7 +228,7 @@ export function collectWords(squares: Square[], xStart: number, yStart: number, 
 
     const next = (x: number,y: number) => {return direction === WordDirection.Horizontal ? [x+1, y] : [x, y+1]}
 
-    for (let x = xStart, y = yStart;squares[getBoardIndex(x,y)].state !== SquareState.Empty; [x,y] = next(x,y)) {
+    for (let x = xStart, y = yStart;x < boardSize && y < boardSize && squares[getBoardIndex(x,y)].state !== SquareState.Empty; [x,y] = next(x,y)) {
         if (squares[getBoardIndex(x,y)].state === SquareState.Working) {
             const otherDirection = direction === WordDirection.Horizontal ? WordDirection.Vertical : WordDirection.Horizontal;
             const candidate = getWord(squares, x, y, otherDirection);
@@ -270,12 +271,12 @@ export function getWord(squares: Square[], xStart: number, yStart: number, direc
     let ret : placedLetter[] = []
     if (direction === WordDirection.Horizontal) {
         for (; xStart > 0 && squares[getBoardIndex(xStart-1,yStart)].state!==SquareState.Empty; --xStart) {}
-        for (let x = xStart; squares[getBoardIndex(x,yStart)].state!==SquareState.Empty && x < boardSize; ++x) {
+        for (let x = xStart; x < boardSize && squares[getBoardIndex(x,yStart)].state!==SquareState.Empty; ++x) {
             ret.push(getPlacedLetterInfo(squares[getBoardIndex(x,yStart)], x, yStart));
         }
     } else if (direction === WordDirection.Vertical) {
         for (; yStart > 0 && squares[getBoardIndex(xStart,yStart-1)].state!==SquareState.Empty; --yStart) {}
-        for (let y = yStart; squares[getBoardIndex(xStart,y)].state!==SquareState.Empty && y < boardSize; ++y) {
+        for (let y = yStart; y < boardSize && squares[getBoardIndex(xStart,y)].state!==SquareState.Empty; ++y) {
             ret.push(getPlacedLetterInfo(squares[getBoardIndex(xStart,y)], xStart, y));
         }
     }

@@ -76,27 +76,33 @@ describe('tile validaton', () => {
     it('hasNoGaps', () => {
         let squares = new Array(boardSize * boardSize).fill({ value: ' ', state: SquareState.Empty });
 
-        squares[getBoardIndex(1, 1)] = { values: 'a', state: SquareState.Working };
+        squares[getBoardIndex(14, 14)] = { value: 'a', state: SquareState.Working };
+        expect(hasNoGaps(squares, 14, 14, WordDirection.Horizontal)).toEqual(true);
+
+        squares[getBoardIndex(14, 14)] = { value: ' ', state: SquareState.Empty };
+        squares[getBoardIndex(1, 1)] = { value: 'a', state: SquareState.Working };
         expect(hasNoGaps(squares, 1, 1, WordDirection.Vertical)).toEqual(true);
 
-        squares[getBoardIndex(2, 1)] = { values: 'a', state: SquareState.Working };
-        squares[getBoardIndex(3, 1)] = { values: 'a', state: SquareState.Working };
+        squares[getBoardIndex(2, 1)] = { value: 'a', state: SquareState.Working };
+        squares[getBoardIndex(3, 1)] = { value: 'a', state: SquareState.Working };
         expect(hasNoGaps(squares, 1, 1, WordDirection.Horizontal)).toEqual(true);
 
-        squares[getBoardIndex(2, 1)] = { values: 'a', state: SquareState.Placed };
+        squares[getBoardIndex(2, 1)] = { value: 'a', state: SquareState.Placed };
         expect(hasNoGaps(squares, 1, 1, WordDirection.Horizontal)).toEqual(true);
 
-        squares[getBoardIndex(2, 1)] = { values: 'a', state: SquareState.Empty };
+        squares[getBoardIndex(2, 1)] = { value: ' ', state: SquareState.Empty };
         expect(hasNoGaps(squares, 1, 1, WordDirection.Horizontal)).toEqual(false);
 
-        squares[getBoardIndex(1, 2)] = { values: 'a', state: SquareState.Working };
-        squares[getBoardIndex(3, 1)] = { values: 'a', state: SquareState.Empty };
+        squares[getBoardIndex(1, 2)] = { value: 'a', state: SquareState.Working };
+        squares[getBoardIndex(3, 1)] = { value: 'a', state: SquareState.Empty };
         expect(hasNoGaps(squares, 1, 1, WordDirection.Vertical)).toEqual(true);
     });
 });
 
 describe('tile validaton', () => {
     const extractWord = (n : placedLetter) => n.letter;
+    const extractWords = (v: placedLetter[]) : string => v.map(extractWord).join("");
+
     it('getWord', () => {
         expect((getWord(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal) as placedLetter[])
             .map(extractWord).join(""))
@@ -115,7 +121,18 @@ describe('tile validaton', () => {
             .toEqual("JEST");
     });
 
-    const extractWords = (v: placedLetter[]) : string => v.map(extractWord).join("");
+    it('getWordAtEdge', () => {
+        expect((getWord(makeTestSquares(["           test", "ING"]), 11, 0, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((getWord(makeTestSquares(["","","","","","","","","","","","","","","           test"]), 11, 14, WordDirection.Horizontal) as placedLetter[])
+            .map(extractWord).join(""))
+            .toEqual("TEST");
+        expect((collectWords(makeTestSquares(["","","","","","","","","","","","","","","           test"]), 11, 14, WordDirection.Horizontal) as placedLetter[][])
+            .map(extractWords))
+            .toEqual(["TEST"]);
+    });
+
     it('collectWords', () => {
         expect((collectWords(makeTestSquares(["test"]), 0, 0, WordDirection.Horizontal) as placedLetter[][])
             .map(extractWords))
