@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
 import { newGame, placeWorkingTile } from '../board/boardSlice';
-import { SquareState } from '../board/engine';
+import { getTileValue, SquareState } from '../board/engine';
 
 export interface PlayerState {
   tiles: string[];
   score: number;
+  penalty: number;
   username: string;
 }
 
@@ -14,11 +15,13 @@ const initialState : {
   currentPlayer: number;
   loggedInPlayer: number;
   username: string;
+  passCount: number;
   players: PlayerState[];
 } = {
   currentPlayer: 0,
   loggedInPlayer: -1,
   username: '',
+  passCount: 0,
   players: []};
 
 export const playersSlice = createSlice({
@@ -32,12 +35,18 @@ export const playersSlice = createSlice({
     addTiles: (state, action) => {
       state.players[action.payload.player].tiles += action.payload.tiles
     },
-    nextPlayer: (state) => {
+    nextPlayer: (state, action) => {
+      state.passCount = action.payload ? state.passCount + 1 : 0;
       state.currentPlayer = (state.currentPlayer + 1) % state.players.length;
     },
     joinGame: (state) => {
-      const playerCount = state.players.push({username: state.username, score: 0, tiles: []});
+      const playerCount = state.players.push({username: state.username, score: 0, penalty: 0, tiles: []});
       state.loggedInPlayer = playerCount - 1;
+    },
+    endGame: (state) => {
+      state.players.forEach((element, index) => {
+        element.penalty = element.tiles.reduce((acc: number, val: string) => acc + getTileValue(val), 0)
+      })
     },
     login: (state, action) => {
       state.username = action.payload.username;
@@ -57,15 +66,16 @@ export const playersSlice = createSlice({
       return state;
     });
     builder.addCase(newGame, (state) => {
-      state.players = [{username: state.username, score: 0, tiles: []}]
+      state.players = [{username: state.username, score: 0, penalty: 0, tiles: []}]
       state.currentPlayer = 0;
+      state.passCount = 0;
       state.loggedInPlayer = 0;
       return state;
     });
   }
 });
 
-export const { accumulateScore, addTiles, nextPlayer, joinGame, login, logout} = playersSlice.actions;
+export const { accumulateScore, addTiles, nextPlayer, joinGame, endGame, login, logout} = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

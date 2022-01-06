@@ -53,15 +53,15 @@ export function Hand() {
 
         <button
           className={styles.button}
-          aria-label="Return Tiles"
+          aria-label="Return Tiles To Hand"
           onClick={() => {dispatch(returnTiles({}));}}
         >
-          Return Tiles
+          Return Tiles to Hand
         </button>
         <button
           className={styles.button}
           aria-label="Play Tiles"
-          onClick={() => {dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer())}}
+          onClick={() => {dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer(false))}}
           disabled={!isValidPlacement([...board.squares.values()])}
         >
           Place Tiles
@@ -69,7 +69,7 @@ export function Hand() {
         <button
           className={styles.button}
           aria-label="Pass"
-          onClick={() => {dispatch(nextPlayer());}}
+          onClick={() => {dispatch(nextPlayer(true));}}
         >
           Pass
         </button>

@@ -16,7 +16,6 @@ export const boardSlice = createSlice({
     loadGame: (state, action) => {
       // done in top level store reducer
     },
-    // play word commits the current working tiles to a played word
     playWord: (state, action) => {
       // done in top level store reducer
     },
