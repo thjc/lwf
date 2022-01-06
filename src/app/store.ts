@@ -22,8 +22,9 @@ function crossSliceReducer(state: StoreState, action:any) {
       const count = 7-state.players.players[state.players.loggedInPlayer].tiles.length;
       for (let ii = 0; ii < count && availableTiles.length > 0; ++ii)
       {
-        let index = Math.floor(Math.random()*newstate.bag.tiles.length);
+        let index = Math.floor(Math.random()*availableTiles.length);
         let tileValue = availableTiles.splice(index,1);
+        console.log(index, tileValue, availableTiles)
         pickedTiles.push(tileValue[0]);
       }
       newstate.bag.tiles = availableTiles;
