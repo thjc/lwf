@@ -24,7 +24,6 @@ function crossSliceReducer(state: StoreState, action:any) {
       {
         let index = Math.floor(Math.random()*availableTiles.length);
         let tileValue = availableTiles.splice(index,1);
-        console.log(index, tileValue, availableTiles)
         pickedTiles.push(tileValue[0]);
       }
       newstate.bag.tiles = availableTiles;
