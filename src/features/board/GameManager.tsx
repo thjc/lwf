@@ -10,16 +10,22 @@ import { takeTiles } from '../bag/bagSlice';
 import { Login } from '../player/Login';
 import { joinGame, endGame, selectPlayers, PlayerState } from '../player/playersSlice';
 import styles from './Board.module.css';
-import { newGame } from './boardSlice';
+import { newGame, selectBoard } from './boardSlice';
+import { findStartWorkingTile } from './engine';
 
 
 export function GameManager() {
   const players = useAppSelector(selectPlayers);
+  const board = useAppSelector(selectBoard);
   const dispatch = useAppDispatch();
   const isLoggedIn = players.username !== '';
 
-  let gameOver = players.passCount >= players.players.length;
-  players.players.forEach((v: PlayerState) => { if (v.tiles.length === 0) { gameOver = true; } })
+  // make sure we don't detect end of game when turn in progress, or no players loaded
+  let gameOver = false;
+  if (players.players.length > 0 && findStartWorkingTile(board.squares) === undefined) {
+    gameOver = players.passCount >= players.players.length;
+    players.players.forEach((v: PlayerState) => { if (v.tiles.length === 0) { gameOver = true; } })
+  }
   const dispatchEnd = () => {if (gameOver) {
     dispatch(endGame());
   }}
