@@ -22,7 +22,6 @@ export function Login(props : LoginProps) {
     dispatch(logout());
   }
 
-
   useEffect(() => {
     if(players.username && cookies['username'] === undefined) {
       setCookie('username', players.username, {path: '/'})

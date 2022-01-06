@@ -16,7 +16,6 @@ import {
 } from './../board/boardSlice';
 
 import { useStore } from 'react-redux';
-import { login } from '../player/playersSlice';
 
 export function GameLink() {
   const dispatch = useAppDispatch();
@@ -34,10 +33,9 @@ export function GameLink() {
     if (search.startsWith('?game='))
     {
       const gameState = JSON.parse(atob(search.substring(search.indexOf('=')+1)));
-      // copy username so we can restore after loading game
-      const username = store.getState().players.username;
+      // clear out username we recieved with the game state so we reset to current user
+      gameState.players.username = undefined;
       dispatch(loadGame(gameState));
-      dispatch(login(username));
     }
   }
 
