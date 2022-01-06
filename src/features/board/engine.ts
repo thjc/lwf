@@ -24,6 +24,7 @@ export interface Square {
 
 export interface BoardState {
     squares: Square[];
+    blankToSelect: number;
 }
 
 export const boardSize = 15;
@@ -58,7 +59,7 @@ export function getTileValue(tileLetter: string) : number {
         'Y': 4,
         'Z': 10
     };
-    return table[tileLetter[0].toUpperCase()] || 1;
+    return table[tileLetter[0].toUpperCase()];
 }
 
 export function getBoardIndex(x: number, y: number) : number {
@@ -142,6 +143,9 @@ export function hasNoGaps(squares: Square[], xStart: number, yStart: number, dir
                 break;
             }
             case SquareState.Working: {
+                if (!sq.value || (sq.value.length === 1 && sq.value[0] === ' ')) {
+                    valid = false;
+                }
                 if (gaps > 0) {
                     valid = false;
                 }

@@ -84,6 +84,13 @@
   grid-auto-flow: row;
 }
 
+.letterGrid {
+  display: grid;
+  grid-template-columns: 22px 22px 22px 22px 22px 22px;
+  grid-template-rows: 22px 22px 22px 22px 22px;
+  grid-auto-flow: row;
+}
+
 .tile {
   display: grid;
   grid-template-columns: 20% auto 20%;
@@ -110,6 +117,10 @@
   text-align: center;
   grid-column-start: 2;
   grid-row-start: 2;
+}
+
+.blankTile {
+  color: red;
 }
 
 .tileValue {

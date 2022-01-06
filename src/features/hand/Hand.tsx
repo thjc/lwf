@@ -62,7 +62,7 @@ export function Hand() {
           className={styles.button}
           aria-label="Play Tiles"
           onClick={() => {dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer())}}
-          disabled={!isValidPlacement([...board.values()])}
+          disabled={!isValidPlacement([...board.squares.values()])}
         >
           Place Tiles
         </button>

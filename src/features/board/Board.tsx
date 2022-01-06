@@ -12,6 +12,7 @@ import {
   selectBoard,
 } from './boardSlice';
 import styles from './Board.module.css';
+import { BlankSelector } from './BlankSelector';
 
 export function Board() {
   const board = useAppSelector(selectBoard);
@@ -24,8 +25,9 @@ export function Board() {
             Board
           </Heading>
           <div className={styles.boardGrid}>
-            {Array.from(board.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={x}></BoardSquare>) })}
+            {Array.from(board.squares.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={x}></BoardSquare>) })}
           </div>
+          {board.blankToSelect >= 0 ? (<BlankSelector></BlankSelector>) : ""}
         </Box>
       </div>
     </div>
