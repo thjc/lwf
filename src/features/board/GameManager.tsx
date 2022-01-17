@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 
 import {
-  Box,
-  Card,
+  Flex,
 } from 'rebass'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -19,6 +18,7 @@ export function GameManager() {
   const board = useAppSelector(selectBoard);
   const dispatch = useAppDispatch();
   const isLoggedIn = players.username !== '';
+  const isInGame = players.loggedInPlayer >= 0;
 
   // make sure we don't detect end of game when turn in progress, or no players loaded
   let gameOver = false;
@@ -26,9 +26,11 @@ export function GameManager() {
     gameOver = players.passCount >= players.players.length;
     players.players.forEach((v: PlayerState) => { if (v.tiles.length === 0) { gameOver = true; } })
   }
-  const dispatchEnd = () => {if (gameOver) {
-    dispatch(endGame());
-  }}
+  const dispatchEnd = () => {
+    if (gameOver) {
+      dispatch(endGame());
+    }
+  }
   useEffect(dispatchEnd);
 
   const loggedInButtons = isLoggedIn ? (<div><button
@@ -38,23 +40,21 @@ export function GameManager() {
   >
     New Game
   </button>
-    <button
+    {!isInGame ? (<button
       className={styles.button}
       aria-label="Join Game"
       onClick={() => { dispatch(joinGame()); dispatch(takeTiles()) }}
       disabled={!isLoggedIn || gameOver}
     >
       Join Game
-    </button>
+    </button>) : ""}
     {gameOver ? (<span>Game Over!!!!</span>) : ""}
   </div>) : '';
 
   return (
-    <Box>
-      <Card>
-        <Login isLoggedIn={isLoggedIn} />
-        {loggedInButtons}
-      </Card>
-    </Box>
+    <Flex>
+      <Login isLoggedIn={isLoggedIn} />
+      {loggedInButtons}
+    </Flex>
   )
 };
