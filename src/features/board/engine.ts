@@ -1,5 +1,3 @@
-import { TupleType } from "typescript";
-
 interface tileValue {
     [key: string]: number;
 }

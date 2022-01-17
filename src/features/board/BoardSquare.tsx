@@ -11,7 +11,7 @@ import {
   placeWorkingTile,
 } from './boardSlice';
 
-import { boardSize, getBoardCoordinates, getSquareType, SquareState, SquareType } from './engine';
+import { getBoardCoordinates, getSquareType, SquareState, SquareType } from './engine';
 
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';
@@ -21,7 +21,7 @@ export function BoardSquare(props:any) {
 
   const tileValue = props.tile;
 
-  const [{ isOver }, drop] = useDrop(
+  const [, drop] = useDrop(
     () => ({
       accept: 'tile',
       drop: (item: any) => dispatch(placeWorkingTile({value: item.value, from: item.from, place: props.position})),
