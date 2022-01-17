@@ -20,6 +20,7 @@ export function BoardSquare(props:any) {
   const dispatch = useAppDispatch();
 
   const tileValue = props.tile;
+  const canPlayOnBoard = props.canPlay;
 
   const [, drop] = useDrop(
     () => ({
@@ -59,6 +60,6 @@ export function BoardSquare(props:any) {
         case(SquareType.DoubleLetter): { return styles.boardDoubleLetter }
       }
     })(type);
-    return (<Box ref={drop} className={style}></Box>)
+    return (<Box ref={canPlayOnBoard ? drop : undefined} className={style}></Box>)
   }
 }

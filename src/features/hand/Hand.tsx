@@ -35,49 +35,54 @@ export function Hand() {
   const dispatch = useAppDispatch();
   const board = useAppSelector(selectBoard);
   const players = useAppSelector(selectPlayers);
-  let player : PlayerState | undefined = undefined;
-  let isCurrentPlayer = false;
-  if (players.players.length > 0 && players.currentPlayer >= 0) {
-    player = players.players[players.currentPlayer];
-    isCurrentPlayer = player ? players.username === player.username : false;
+
+  // are we in the game?
+  if (players.loggedInPlayer >= 0) {
+    const player = players.players[players.loggedInPlayer];
+    const isCurrentPlayer = players.currentPlayer === players.loggedInPlayer;
+
+    return (
+      <div>
+        <div className={styles.row}>
+          <Box>
+            <Card>
+              <div className={styles.handGrid}>
+                {Array.from(player.tiles.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={{ value: x, state: SquareState.Hand }}></BoardSquare>) })}
+              </div>
+
+              {!isCurrentPlayer ? (<div>Waiting for turn</div>) : (<div>
+                <button
+                  className={styles.button}
+                  aria-label="Return Tiles To Hand"
+                  onClick={() => { dispatch(returnTiles({})); }}
+                >
+                  Return Tiles to Hand
+                </button>
+                <button
+                  className={styles.button}
+                  aria-label="Play Tiles"
+                  onClick={() => { dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer(false)) }}
+                  disabled={!isValidPlacement([...board.squares.values()])}
+                >
+                  Place Tiles
+                </button>
+                <button
+                  className={styles.button}
+                  aria-label="Pass"
+                  onClick={() => { dispatch(nextPlayer(true)); }}
+                >
+                  Pass
+                </button>
+              </div>)}
+
+
+            </Card>
+          </Box>
+        </div>
+      </div>
+    );
+  } else {
+    return (<Card>Just chilling and watching</Card>)
   }
 
-  return player === undefined || !isCurrentPlayer ? (<div>Waiting for turn</div>) : (
-    <div>
-      <div className={styles.row}>
-        <Box>
-          <Card>
-          <div className={styles.handGrid}>
-          {Array.from(player.tiles.values()).map((x,n) => {return (<BoardSquare key={n} position={n} tile={ {value: x, state: SquareState.Hand} }></BoardSquare>)})}
-        </div>
-
-        <button
-          className={styles.button}
-          aria-label="Return Tiles To Hand"
-          onClick={() => {dispatch(returnTiles({}));}}
-        >
-          Return Tiles to Hand
-        </button>
-        <button
-          className={styles.button}
-          aria-label="Play Tiles"
-          onClick={() => {dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer(false))}}
-          disabled={!isValidPlacement([...board.squares.values()])}
-        >
-          Place Tiles
-        </button>
-        <button
-          className={styles.button}
-          aria-label="Pass"
-          onClick={() => {dispatch(nextPlayer(true));}}
-        >
-          Pass
-        </button>
-
-
-          </Card>
-  </Box>
-      </div>
-    </div>
-  );
 }

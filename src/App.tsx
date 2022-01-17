@@ -34,12 +34,12 @@ function App() {
             width={1 / 4}>
             <Bag />
             <Players />
-            <Hand />
           </Box>
           <Box>
             <Board />
           </Box>
         </Flex>
+        <Hand />
       </DndProvider>
       <GameLink></GameLink>
     </div>
