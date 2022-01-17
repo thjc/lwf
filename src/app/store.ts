@@ -13,15 +13,14 @@ const combinedReducer = combineReducers({
 
 type StoreState = ReturnType<typeof combinedReducer>;
 
-function crossSliceReducer(state: StoreState, action:any) {
+function crossSliceReducer(state: StoreState, action: any) {
   const pickTiles = (newstate: StoreState) => {
     let availableTiles = [...newstate.bag.tiles];
     let pickedTiles = [];
-    const count = 7-newstate.players.players[newstate.players.loggedInPlayer].tiles.length;
-    for (let ii = 0; ii < count && availableTiles.length > 0; ++ii)
-    {
-      let index = Math.floor(Math.random()*availableTiles.length);
-      let tileValue = availableTiles.splice(index,1);
+    const count = 7 - newstate.players.players[newstate.players.loggedInPlayer].tiles.length;
+    for (let ii = 0; ii < count && availableTiles.length > 0; ++ii) {
+      let index = Math.floor(Math.random() * availableTiles.length);
+      let tileValue = availableTiles.splice(index, 1);
       pickedTiles.push(tileValue[0]);
     }
     newstate.bag.tiles = availableTiles;
@@ -52,18 +51,20 @@ function crossSliceReducer(state: StoreState, action:any) {
     // play word commits the current working tiles to a played word
     case 'board/playWord': {
       const squares = state.board.squares;
-      let newstate : StoreState = JSON.parse(JSON.stringify(state))
+      let newstate: StoreState = JSON.parse(JSON.stringify(state))
       let startPlace = findStartWorkingTile(squares);
       let direction = getDirection(squares);
       if (startPlace !== undefined && isValidPlacement(squares) && isValidWordSet(squares, startPlace[0], startPlace[1], direction)) {
-        const score = scoreWords(squares, startPlace[0], startPlace[1], direction);
+        let score = scoreWords(squares, startPlace[0], startPlace[1], direction);
+        let letterCount = 0;
+        newstate.board.squares.forEach((value) => { if (value.state === SquareState.Working) { value.state = SquareState.Placed; letterCount++ } })
+        if (letterCount === 7) { score += 50 }
         newstate.players.players[newstate.players.currentPlayer].score += score;
-        newstate.board.squares.forEach((value) => {if (value.state === SquareState.Working) { value.state = SquareState.Placed}})
       }
       return newstate;
     }
     case 'board/returnTiles': {
-      let newstate : StoreState = JSON.parse(JSON.stringify(state))
+      let newstate: StoreState = JSON.parse(JSON.stringify(state))
 
       newstate.board.squares.forEach(sq => {
         if (sq.state === SquareState.Working) {
@@ -83,7 +84,7 @@ function crossSliceReducer(state: StoreState, action:any) {
   }
 }
 
-function rootReducer(state : any, action: any) {
+function rootReducer(state: any, action: any) {
   const intermediateState = combinedReducer(state, action)
   const finalState = crossSliceReducer(intermediateState, action)
   return finalState
