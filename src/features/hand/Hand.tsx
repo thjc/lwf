@@ -13,6 +13,7 @@ import {
 } from '../player/playersSlice';
 
 import {
+  dumpTiles,
   takeTiles,
 } from './../bag/bagSlice';
 
@@ -72,6 +73,13 @@ export function Hand() {
                   onClick={() => { dispatch(nextPlayer(true)); }}
                 >
                   Pass
+                </button>
+                <button
+                  className={styles.button}
+                  aria-label="Dump Tiles"
+                  onClick={() => { dispatch(dumpTiles()); dispatch(nextPlayer(false)); }}
+                >
+                  Dump
                 </button>
               </div>)}
 

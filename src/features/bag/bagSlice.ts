@@ -48,6 +48,9 @@ export const bagSlice = createSlice({
     takeTiles: (state) => {
       // Done in top level store scope
     },
+    dumpTiles: (state) => {
+      // Done in top level store scope
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(newGame, (state) => {
@@ -56,7 +59,7 @@ export const bagSlice = createSlice({
   }
 });
 
-export const { takeTiles } = bagSlice.actions;
+export const { dumpTiles, takeTiles } = bagSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

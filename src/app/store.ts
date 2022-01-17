@@ -14,20 +14,38 @@ const combinedReducer = combineReducers({
 type StoreState = ReturnType<typeof combinedReducer>;
 
 function crossSliceReducer(state: StoreState, action:any) {
+  const pickTiles = (newstate: StoreState) => {
+    let availableTiles = [...newstate.bag.tiles];
+    let pickedTiles = [];
+    const count = 7-newstate.players.players[newstate.players.loggedInPlayer].tiles.length;
+    for (let ii = 0; ii < count && availableTiles.length > 0; ++ii)
+    {
+      let index = Math.floor(Math.random()*availableTiles.length);
+      let tileValue = availableTiles.splice(index,1);
+      pickedTiles.push(tileValue[0]);
+    }
+    newstate.bag.tiles = availableTiles;
+    newstate.players.players[newstate.players.loggedInPlayer].tiles.push(...pickedTiles)
+  }
+
+
+
   switch (action.type) {
+    case 'bag/dumpTiles': {
+      let newstate = JSON.parse(JSON.stringify(state))
+
+      newstate.bag.tiles.push(...newstate.players.players[state.players.loggedInPlayer].tiles)
+      newstate.players.players[state.players.loggedInPlayer].tiles = []
+
+      pickTiles(newstate);
+
+      return newstate;
+    }
+
     case 'bag/takeTiles': {
       let newstate = JSON.parse(JSON.stringify(state))
-      let availableTiles = [...newstate.bag.tiles];
-      let pickedTiles = [];
-      const count = 7-state.players.players[state.players.loggedInPlayer].tiles.length;
-      for (let ii = 0; ii < count && availableTiles.length > 0; ++ii)
-      {
-        let index = Math.floor(Math.random()*availableTiles.length);
-        let tileValue = availableTiles.splice(index,1);
-        pickedTiles.push(tileValue[0]);
-      }
-      newstate.bag.tiles = availableTiles;
-      newstate.players.players[state.players.loggedInPlayer].tiles.push(...pickedTiles)
+
+      pickTiles(newstate);
 
       return newstate;
     }
