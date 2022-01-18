@@ -6,13 +6,14 @@ export enum SquareState {
     Empty,
     Placed,
     Working,
-    Hand
+    Hand,
+    HandEnd,
 }
 
 export enum WordDirection {
     Invalid, // letters are not only in one direction
     Horizontal,
-    Vertical
+    Vertical,
 }
 
 export interface Square {

@@ -112,6 +112,12 @@
   background-color: orange;
 }
 
+.rackEndSquare {
+  background-color: whitesmoke;
+  border-color: tomato;
+  border-style: dashed;
+}
+
 .tileLetter {
   font-size: 12pt;
   text-align: center;

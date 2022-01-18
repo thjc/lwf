@@ -8,7 +8,6 @@ import {
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   nextPlayer,
-  PlayerState,
   selectPlayers
 } from '../player/playersSlice';
 
@@ -18,7 +17,6 @@ import {
 } from './../bag/bagSlice';
 
 import {
-  SquareState,
   isValidPlacement
 } from './../board/engine';
 
@@ -28,7 +26,7 @@ import {
   selectBoard,
 } from './../board/boardSlice';
 
-import { BoardSquare } from '../board/BoardSquare';
+import { TileRack } from './TileRack';
 
 import styles from './Hand.module.css';
 
@@ -39,7 +37,6 @@ export function Hand() {
 
   // are we in the game?
   if (players.loggedInPlayer >= 0) {
-    const player = players.players[players.loggedInPlayer];
     const isCurrentPlayer = players.currentPlayer === players.loggedInPlayer;
 
     return (
@@ -47,9 +44,7 @@ export function Hand() {
         <div className={styles.row}>
           <Box>
             <Card>
-              <div className={styles.handGrid}>
-                {Array.from(player.tiles.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={{ value: x, state: SquareState.Hand }}></BoardSquare>) })}
-              </div>
+              <TileRack/>
 
               {!isCurrentPlayer ? (<div>Waiting for turn</div>) : (<div>
                 <button

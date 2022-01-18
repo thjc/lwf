@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { Tile } from './Tile';
 
@@ -16,16 +16,18 @@ import { getBoardCoordinates, getSquareType, SquareState, SquareType } from './e
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';
 
-export function BoardSquare(props:any) {
+export function BoardSquare(props: any) {
   const dispatch = useAppDispatch();
 
+  const ref = useRef<HTMLDivElement>(null)
+
   const tileValue = props.tile;
-  const canPlayOnBoard = props.canPlay;
+  const canPlayOnBoard = props.canPlay || tileValue.state === SquareState.HandEnd;
 
   const [, drop] = useDrop(
     () => ({
       accept: 'tile',
-      drop: (item: any) => dispatch(placeWorkingTile({value: item.value, from: item.from, place: props.position})),
+      drop: (item: any) => dispatch(placeWorkingTile({ value: item.value, from: item.from, place: props.position, dropType: tileValue.state })),
       collect: (monitor) => ({
         isOver: !!monitor.isOver()
       })
@@ -40,26 +42,35 @@ export function BoardSquare(props:any) {
       isDragging: !!monitor.isDragging()
     }),
   }),
-  [tileValue]
+    [tileValue]
   )
 
-   if (tileValue.state !== SquareState.Empty) {
+  if (tileValue.state !== SquareState.Empty && tileValue.state !== SquareState.HandEnd) {
+    if (tileValue.state !== SquareState.Placed) {
+      drag(ref);
+      if (tileValue.state === SquareState.Hand) {
+        drop(ref);
+      }
+    }
     return (
-      <Box ref={tileValue.state !== SquareState.Placed ? drag : undefined}>
+      <Box ref={ref}>
         <Tile isDragging={isDragging} tileType={tileValue.state} position={props.position}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
     );
   } else {
     const type = getSquareType(...getBoardCoordinates(props.position));
-    const style = ((v : SquareType) => {
-      switch (v) {
-        case(SquareType.Plain): { return styles.boardSquare }
-        case(SquareType.TripleWord): { return styles.boardTripleWord }
-        case(SquareType.TripleLetter): { return styles.boardTripleLetter }
-        case(SquareType.DoubleWord): { return styles.boardDoubleWord }
-        case(SquareType.DoubleLetter): { return styles.boardDoubleLetter }
-      }
-    })(type);
+    let style = styles.rackEndSquare;
+    if (tileValue.state !== SquareState.HandEnd) {
+      style = ((v: SquareType) => {
+        switch (v) {
+          case (SquareType.Plain): { return styles.boardSquare }
+          case (SquareType.TripleWord): { return styles.boardTripleWord }
+          case (SquareType.TripleLetter): { return styles.boardTripleLetter }
+          case (SquareType.DoubleWord): { return styles.boardDoubleWord }
+          case (SquareType.DoubleLetter): { return styles.boardDoubleLetter }
+        }
+      })(type);
+    }
     return (<Box ref={canPlayOnBoard ? drop : undefined} className={style}></Box>)
   }
 }

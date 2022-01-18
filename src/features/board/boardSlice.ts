@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { BoardState, boardSize, SquareState } from './engine';
+import { BoardState, boardSize, SquareState, SquareType } from './engine';
 
 
 const initialState: BoardState = {
@@ -20,9 +20,10 @@ export const boardSlice = createSlice({
       // done in top level store reducer
     },
     placeWorkingTile: (state, action) => {
-      state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};
+      if (action.payload.dropType === SquareState.Empty) {
+        state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};
+      }
       if (action.payload.value.state === SquareState.Working) {
-
         state.squares[action.payload.from] = {value: '', state: SquareState.Empty};
       }
     },
