@@ -62,13 +62,13 @@ export const playersSlice = createSlice({
     builder.addCase(placeWorkingTile, (state, action) => {
       let removeFrom = action.payload.from;
       if (action.payload.dropType === SquareState.Hand || action.payload.dropType === SquareState.HandEnd) {
-        state.players[state.currentPlayer].tiles.splice(action.payload.place, 0, action.payload.value.value);
+        state.players[state.loggedInPlayer].tiles.splice(action.payload.place, 0, action.payload.value.value);
         if (removeFrom >= action.payload.place) {
           removeFrom += 1;
         }
       }
       if (action.payload.value.state === SquareState.Hand) {
-        state.players[state.currentPlayer].tiles.splice(removeFrom, 1);
+        state.players[state.loggedInPlayer].tiles.splice(removeFrom, 1);
       }
       return state;
     });
