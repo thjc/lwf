@@ -35,6 +35,7 @@ export function GameLink() {
       const gameState = JSON.parse(atob(search.substring(search.indexOf('=')+1)));
       // clear out username we recieved with the game state so we reset to current user
       gameState.players.username = undefined;
+      gameState.players.loggedInPlayer = -1;
       dispatch(loadGame(gameState));
     }
   }
