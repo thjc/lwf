@@ -15,17 +15,13 @@ export function Bag() {
   const bag = useAppSelector(selectBag);
 
   return (
-    <div>
-      <div className={styles.row}>
-        <Box>
-        <Heading as='h3'>
-          Tiles Remaining
-        </Heading>
-        <div>
-          {bag.tiles.length}
-        </div>
-  </Box>
+    <Box width={1 / 2}>
+      <Heading as='h3'>
+        Tiles Remaining
+      </Heading>
+      <div>
+        {bag.tiles.length}
       </div>
-    </div>
+    </Box>
   );
 }

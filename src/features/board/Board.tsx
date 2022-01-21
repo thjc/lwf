@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   Box,
-  Heading,
 } from 'rebass'
 
 import { BoardSquare } from './BoardSquare';
@@ -22,18 +21,11 @@ export function Board() {
 
 
   return (
-    <div>
-      <div className={styles.row}>
-        <Box>
-          <Heading as='h3'>
-            Board
-          </Heading>
+        <Box width={1}>
           <div className={styles.boardGrid}>
             {Array.from(board.squares.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={x} canPlay={isCurrentPlayer}></BoardSquare>) })}
           </div>
           {board.blankToSelect >= 0 ? (<BlankSelector></BlankSelector>) : ""}
         </Box>
-      </div>
-    </div>
   );
 }

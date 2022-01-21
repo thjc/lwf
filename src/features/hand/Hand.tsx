@@ -40,10 +40,7 @@ export function Hand() {
     const isCurrentPlayer = players.currentPlayer === players.loggedInPlayer;
 
     return (
-      <div>
-        <div className={styles.row}>
-          <Box>
-            <Card>
+            <Card width={1}>
               <TileRack/>
 
               {!isCurrentPlayer ? (<div>Waiting for turn</div>) : (<div>
@@ -80,9 +77,6 @@ export function Hand() {
 
 
             </Card>
-          </Box>
-        </div>
-      </div>
     );
   } else {
     return (<Card>Just chilling and watching</Card>)

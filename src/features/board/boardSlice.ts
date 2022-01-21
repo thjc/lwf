@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { BoardState, boardSize, SquareState, SquareType } from './engine';
+import { BoardState, boardSize, SquareState } from './engine';
 
 
 const initialState: BoardState = {

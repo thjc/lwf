@@ -29,17 +29,12 @@ function App() {
       </Heading>
       <GameManager />
       <DndProvider backend={isMobile ? TouchBackend : HTML5Backend}>
-        <Flex>
-          <Box
-            width={1 / 4}>
-            <Bag />
-            <Players />
-          </Box>
-          <Box>
-            <Board />
-          </Box>
+        <Flex flexWrap='wrap'>
+          <Board />
+          <Hand />
+          <Players />
+          <Bag />
         </Flex>
-        <Hand />
       </DndProvider>
       <GameLink></GameLink>
     </div>
