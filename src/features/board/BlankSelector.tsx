@@ -1,9 +1,6 @@
+import { Box } from '@mui/material';
 import React from 'react';
 
-import {
-  Box,
-  Card,
-} from 'rebass'
 import { useAppDispatch } from '../../app/hooks';
 
 import styles from './Board.module.css';
@@ -20,13 +17,11 @@ export function BlankSelector(props: any) {
   };
 
   return (
-      <Box>
-        <Card>
-          Select blank tile value
-          <div className={styles.letterGrid}>
-            {Array.from(letters.values()).map((x, n) => { return (<div key={x} onClick={() => selectTile(x)}><Tile key={x} isDragging={false} tileType={SquareState.Hand}>{x}</Tile></div>) })}
-          </div>
-        </Card>
-      </Box>
+    <Box>
+      Select blank tile value
+      <div className={styles.letterGrid}>
+        {Array.from(letters.values()).map((x, n) => { return (<div key={x} onClick={() => selectTile(x)}><Tile key={x} isDragging={false} tileType={SquareState.Hand}>{x}</Tile></div>) })}
+      </div>
+    </Box>
   );
 }

@@ -2,10 +2,6 @@ import React, { useRef } from 'react';
 
 import { Tile } from './Tile';
 
-import {
-  Box,
-} from 'rebass'
-
 import { useAppDispatch } from '../../app/hooks';
 import {
   placeWorkingTile,
@@ -15,6 +11,7 @@ import { getBoardCoordinates, getSquareType, SquareState, SquareType } from './e
 
 import styles from './Board.module.css';
 import { useDrag, useDrop } from 'react-dnd';
+import { Box } from '@mui/material';
 
 export function BoardSquare(props: any) {
   const dispatch = useAppDispatch();

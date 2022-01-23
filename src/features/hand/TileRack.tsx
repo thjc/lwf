@@ -1,9 +1,5 @@
 import React from 'react';
 
-import {
-  Card,
-} from 'rebass'
-
 import { useAppSelector } from '../../app/hooks';
 import {
   selectPlayers
@@ -17,6 +13,7 @@ import {
 import { BoardSquare } from '../board/BoardSquare';
 
 import styles from './Hand.module.css';
+import { Box } from '@mui/material';
 
 export function TileRack() {
   const players = useAppSelector(selectPlayers);
@@ -25,13 +22,13 @@ export function TileRack() {
 
   return (
     <div className={styles.row}>
-      <Card>
+      <Box>
         <div className={styles.handGrid}>
           {Array.from(player.tiles.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={{ value: x, state: SquareState.Hand }}></BoardSquare>) })}
           {/* extra empty tile for dropping back to hand */}
           <BoardSquare key={player.tiles.length} position={player.tiles.length} tile={{ value: '', state: SquareState.HandEnd}}></BoardSquare>
         </div>
-      </Card>
+      </Box>
     </div>
   );
 

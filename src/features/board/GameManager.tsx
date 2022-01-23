@@ -1,8 +1,5 @@
+import { Grid } from '@mui/material';
 import React, { useEffect } from 'react';
-
-import {
-  Flex,
-} from 'rebass'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { takeTiles } from '../bag/bagSlice';
@@ -52,9 +49,9 @@ export function GameManager() {
   </div>) : '';
 
   return (
-    <Flex>
+    <Grid>
       <Login isLoggedIn={isLoggedIn} />
       {loggedInButtons}
-    </Flex>
+    </Grid>
   )
 };

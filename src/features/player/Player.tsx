@@ -2,19 +2,17 @@ import React from 'react';
 
 import { PlayerState } from './playersSlice';
 
-import {
-  Card,
-  Heading,
-} from 'rebass'
-
 import styles from './Player.module.css';
+import { Box, Typography } from '@mui/material';
 
 
-export function Player(args : {player: PlayerState, active: boolean}) {
+export function Player(args: { player: PlayerState, active: boolean }) {
   return (
-    <Card className={args.active ? styles.activePlayer : ""}>
-      <Heading>Player {args.player.username}</Heading>
+    <Box className={args.active ? styles.activePlayer : ""}>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        Player {args.player.username}
+      </Typography>
       Score: {args.player.score - args.player.penalty}
-    </Card>
+    </Box>
   )
 };

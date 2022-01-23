@@ -1,9 +1,5 @@
 import React from 'react';
 
-import {
-  Box,
-} from 'rebass'
-
 import { BoardSquare } from './BoardSquare';
 
 import { useAppSelector } from '../../app/hooks';
@@ -13,6 +9,7 @@ import {
 import styles from './Board.module.css';
 import { BlankSelector } from './BlankSelector';
 import { selectPlayers } from '../player/playersSlice';
+import { Container } from '@mui/material';
 
 export function Board() {
   const board = useAppSelector(selectBoard);
@@ -21,11 +18,11 @@ export function Board() {
 
 
   return (
-        <Box width={1}>
+        <Container>
           <div className={styles.boardGrid}>
             {Array.from(board.squares.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={x} canPlay={isCurrentPlayer}></BoardSquare>) })}
           </div>
           {board.blankToSelect >= 0 ? (<BlankSelector></BlankSelector>) : ""}
-        </Box>
+        </Container>
   );
 }

@@ -1,10 +1,5 @@
 import React from 'react';
 
-import {
-  Box,
-  Card,
-} from 'rebass'
-
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import {
@@ -16,6 +11,7 @@ import {
 } from './../board/boardSlice';
 
 import { useStore } from 'react-redux';
+import { Box } from '@mui/material';
 
 export function GameLink() {
   const dispatch = useAppDispatch();
@@ -30,9 +26,8 @@ export function GameLink() {
   if (bag && bag.tiles.length === 100) {
     // TODO make this parsing more robust
     const search = window.location.search;
-    if (search.startsWith('?game='))
-    {
-      const gameState = JSON.parse(atob(search.substring(search.indexOf('=')+1)));
+    if (search.startsWith('?game=')) {
+      const gameState = JSON.parse(atob(search.substring(search.indexOf('=') + 1)));
       // clear out username we recieved with the game state so we reset to current user
       gameState.players.username = undefined;
       gameState.players.loggedInPlayer = -1;
@@ -41,12 +36,8 @@ export function GameLink() {
   }
 
   return (
-    <div>
-      <Box>
-        <Card>
-          <a href={gameLink}>Link to this game</a>
-        </Card>
-      </Box>
-    </div>
+    <Box>
+      <a href={gameLink}>Link to this game</a>
+    </Box>
   );
 }
