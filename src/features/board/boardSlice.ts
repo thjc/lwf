@@ -17,9 +17,11 @@ export const boardSlice = createSlice({
       // done in top level store reducer
     },
     playWord: (state, action) => {
-      // done in top level store reducer
+      // mostly done in top level stop reducer
+      state.blankToSelect = -1;
     },
     placeWorkingTile: (state, action) => {
+      state.blankToSelect = -1;
       if (action.payload.dropType === SquareState.Empty) {
         state.squares[action.payload.place] = {value: action.payload.value.value, state: SquareState.Working};
       }
@@ -31,7 +33,8 @@ export const boardSlice = createSlice({
       state.squares = initialState.squares;
     },
     returnTiles: (state, action) => {
-      // done in top level stop reducer
+      // mostly done in top level stop reducer
+      state.blankToSelect = -1;
     },
     selectBlank: (state, action) => {
       state.blankToSelect = action.payload;
