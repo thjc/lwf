@@ -4,6 +4,8 @@ import { Bag } from './features/bag/Bag';
 import { Board } from './features/board/Board';
 import { Hand } from './features/hand/Hand';
 import { Players } from './features/player/Players';
+import { ServerStatus } from './features/server/ServerStatus';
+
 
 import { isMobile } from 'react-device-detect';
 import { DndProvider } from 'react-dnd'
@@ -46,6 +48,7 @@ function App() {
           <Hand />
           <Players />
           <Bag />
+          <ServerStatus />
         </DndProvider>
         <GameLink></GameLink>
       </Stack>

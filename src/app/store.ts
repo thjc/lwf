@@ -2,6 +2,8 @@ import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/t
 import boardReducer from '../features/board/boardSlice';
 import bagReducer from '../features/bag/bagSlice';
 import playersReducer from '../features/player/playersSlice';
+import serverReducer from '../features/server/serverSlice';
+import serverMiddleware from '../features/server/serverMiddleware'
 import { findStartWorkingTile, getDirection, isValidPlacement, isValidWordSet, scoreWords, SquareState } from '../features/board/engine';
 
 
@@ -9,6 +11,7 @@ const combinedReducer = combineReducers({
   board: boardReducer,
   bag: bagReducer,
   players: playersReducer,
+  server: serverReducer,
 })
 
 type StoreState = ReturnType<typeof combinedReducer>;
@@ -77,6 +80,10 @@ function crossSliceReducer(state: StoreState, action: any) {
       return newstate;
     }
     case 'board/loadGame': {
+      // clear out username we recieved with the game state so we reset to current user
+      action.payload.players.username = "";
+      action.payload.players.loggedInPlayer = -1;
+
       return action.payload;
     }
     default:
@@ -93,6 +100,7 @@ function rootReducer(state: any, action: any) {
 
 export const store = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(serverMiddleware),
 });
 
 export type AppDispatch = typeof store.dispatch;

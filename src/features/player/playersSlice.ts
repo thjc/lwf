@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {v4 as uuidv4} from 'uuid';
 import { RootState } from '../../app/store';
 
 import { newGame, placeWorkingTile } from '../board/boardSlice';
@@ -17,12 +18,14 @@ const initialState : {
   username: string;
   passCount: number;
   players: PlayerState[];
+  gameId: string;
 } = {
   currentPlayer: 0,
   loggedInPlayer: -1,
   username: '',
   passCount: 0,
-  players: []};
+  players: [],
+  gameId: ""};
 
 export const playersSlice = createSlice({
   name: 'player',
@@ -56,6 +59,9 @@ export const playersSlice = createSlice({
       state.username = '';
       state.loggedInPlayer = -1;
     },
+    setGameId: (state, action) => {
+      state.gameId = action.payload;
+    }
 
   },
   extraReducers: (builder) => {
@@ -77,12 +83,13 @@ export const playersSlice = createSlice({
       state.currentPlayer = 0;
       state.passCount = 0;
       state.loggedInPlayer = 0;
+      state.gameId = uuidv4();
       return state;
     });
   }
 });
 
-export const { accumulateScore, addTiles, nextPlayer, joinGame, endGame, login, logout} = playersSlice.actions;
+export const { accumulateScore, addTiles, nextPlayer, joinGame, endGame, login, logout, setGameId} = playersSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

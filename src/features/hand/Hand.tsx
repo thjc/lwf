@@ -21,6 +21,10 @@ import {
   selectBoard,
 } from './../board/boardSlice';
 
+import {
+  serverActions
+} from '../server/serverSlice';
+
 import { TileRack } from './TileRack';
 
 import { Box, Button, Stack } from '@mui/material';
@@ -45,18 +49,30 @@ export function Hand() {
             Return Tiles to Hand
           </Button>
           <Button
-            onClick={() => { dispatch(playWord({})); dispatch(takeTiles()); dispatch(nextPlayer(false)) }}
+            onClick={() => {
+              dispatch(playWord({}));
+              dispatch(takeTiles());
+              dispatch(nextPlayer(false));
+              dispatch(serverActions.sendGameState());
+            }}
             disabled={!isValidPlacement([...board.squares.values()])}
           >
             Place Tiles
           </Button>
           <Button
-            onClick={() => { dispatch(nextPlayer(true)); }}
+            onClick={() => {
+              dispatch(nextPlayer(true));
+              dispatch(serverActions.sendGameState());
+            }}
           >
             Pass
           </Button>
           <Button
-            onClick={() => { dispatch(dumpTiles()); dispatch(nextPlayer(false)); }}
+            onClick={() => {
+              dispatch(dumpTiles());
+              dispatch(nextPlayer(false));
+              dispatch(serverActions.sendGameState());
+            }}
           >
             Dump
           </Button>

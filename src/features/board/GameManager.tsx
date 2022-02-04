@@ -9,6 +9,9 @@ import styles from './Board.module.css';
 import { newGame, selectBoard } from './boardSlice';
 import { findStartWorkingTile } from './engine';
 
+import {
+  serverActions
+} from '../server/serverSlice';
 
 export function GameManager() {
   const players = useAppSelector(selectPlayers);
@@ -26,6 +29,7 @@ export function GameManager() {
   const dispatchEnd = () => {
     if (gameOver) {
       dispatch(endGame());
+      //dispatch(serverActions.sendGameState());
     }
   }
   useEffect(dispatchEnd);
@@ -33,14 +37,23 @@ export function GameManager() {
   const loggedInButtons = isLoggedIn ? (<div><button
     className={styles.button}
     aria-label="New Game"
-    onClick={() => { dispatch(newGame()); dispatch(takeTiles()) }}
+    onClick={() => {
+      dispatch(newGame());
+      dispatch(serverActions.subscribeGame(""));
+      dispatch(takeTiles());
+      dispatch(serverActions.sendGameState());
+    }}
   >
     New Game
   </button>
     {!isInGame ? (<button
       className={styles.button}
       aria-label="Join Game"
-      onClick={() => { dispatch(joinGame()); dispatch(takeTiles()) }}
+      onClick={() => {
+        dispatch(joinGame());
+        dispatch(takeTiles());
+        dispatch(serverActions.sendGameState());
+      }}
       disabled={!isLoggedIn || gameOver}
     >
       Join Game

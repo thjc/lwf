@@ -1,0 +1,68 @@
+import { Middleware } from 'redux'
+import { serverActions } from './serverSlice';
+import { loadGame } from '../board/boardSlice';
+
+const ServerMiddleware: Middleware = store => {
+    let socket: WebSocket | undefined = undefined;
+
+    return next => action => {
+        const isConnectionEstablished = socket && store.getState().server.isConnected;
+
+        console.log("middleware", action, socket)
+
+        if (socket === undefined) {
+//            const socket = new WebSocket('ws://' + window.location.host + '/gamestate');
+            socket = new WebSocket('ws://localhost:8090/gamestate');
+            if (socket !== undefined) {
+                socket.onopen = () => {
+                    if (socket) {
+                        console.log("Connected")
+                        for (let msg of store.getState().server.messages) {
+                            socket.send(JSON.stringify(msg));
+                        }
+                        // if we have a gameId make sure we subscribe before we do anything else with the connection
+                        const gameId = store.getState().players.gameId;
+                        if (gameId) {
+                            sendOrQueue("load", action.payload);
+                        }
+                        store.dispatch(serverActions.connectionEstablished());
+                    }
+                };
+
+                socket.onmessage = (event : MessageEvent) => {
+                    console.log(event);
+                    const msg = JSON.parse(String(event.data));
+                    if (msg.cmd === "update") {
+                        const gameState = JSON.parse(atob(msg.data));
+                        store.dispatch(loadGame(gameState));
+                    }
+                };
+            }
+        }
+
+        const sendOrQueue = (cmd : string, data: string) => {
+            const message = {"cmd": cmd, "data": data };
+            if (socket && isConnectionEstablished) {
+                socket.send(JSON.stringify(message))
+            } else {
+                store.dispatch(serverActions.queueMessage(message));
+            }
+        }
+
+        if (socket && isConnectionEstablished) {
+            if (serverActions.sendGameState.match(action) ) {
+                const stateString = JSON.stringify(store.getState());
+                const encodedState = btoa(stateString !== undefined ? stateString : '');
+                sendOrQueue("store", encodedState);
+            } else if (serverActions.subscribeGame.match(action)) {
+                const gameId = store.getState().players.gameId;
+                action.payload = gameId;
+                sendOrQueue("load", gameId);
+            }
+        }
+
+        next(action);
+    }
+}
+
+export default ServerMiddleware;

@@ -12,6 +12,7 @@ import {
 
 import { useStore } from 'react-redux';
 import { Box } from '@mui/material';
+import { setGameId } from '../player/playersSlice';
 
 export function GameLink() {
   const dispatch = useAppDispatch();
@@ -23,16 +24,21 @@ export function GameLink() {
   const encodedState = btoa(stateString !== undefined ? stateString : '');
   const gameLink = window.location.origin + "/?game=" + encodedState
 
+  if (store.getState().players.gameId) {
+    window.history.replaceState({}, "", "?gameid=" + store.getState().players.gameId);
+  }
+
+
   if (bag && bag.tiles.length === 100) {
     // TODO make this parsing more robust
     const search = window.location.search;
     if (search.startsWith('?game=')) {
       const gameState = JSON.parse(atob(search.substring(search.indexOf('=') + 1)));
-      // clear out username we recieved with the game state so we reset to current user
-      gameState.players.username = undefined;
-      gameState.players.loggedInPlayer = -1;
       dispatch(loadGame(gameState));
+    } else if (search.startsWith('?gameid=')) {
+      dispatch(setGameId(search.substring(search.indexOf('=') + 1)));
     }
+
   }
 
   return (
