@@ -1,25 +1,25 @@
-import React, { useRef } from 'react';
+import React, { useRef } from 'react'
 
-import { Tile } from './Tile';
+import { Tile } from './Tile'
 
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../app/hooks'
 import {
-  placeWorkingTile,
-} from './boardSlice';
+  placeWorkingTile
+} from './boardSlice'
 
-import { getBoardCoordinates, getSquareType, SquareState, SquareType } from './engine';
+import { getBoardCoordinates, getSquareType, SquareState, SquareType } from './engine'
 
-import styles from './Board.module.css';
-import { useDrag, useDrop } from 'react-dnd';
-import { Box } from '@mui/material';
+import styles from './Board.module.css'
+import { useDrag, useDrop } from 'react-dnd'
+import { Box } from '@mui/material'
 
-export function BoardSquare(props: any) {
-  const dispatch = useAppDispatch();
+export function BoardSquare (props: any) {
+  const dispatch = useAppDispatch()
 
   const ref = useRef<HTMLDivElement>(null)
 
-  const tileValue = props.tile;
-  const canPlayOnBoard = props.canPlay || tileValue.state === SquareState.HandEnd;
+  const tileValue = props.tile
+  const canPlayOnBoard = props.canPlay || tileValue.state === SquareState.HandEnd
 
   const [, drop] = useDrop(
     () => ({
@@ -37,26 +37,26 @@ export function BoardSquare(props: any) {
     item: { value: tileValue, from: props.position },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
-    }),
+    })
   }),
-    [tileValue]
+  [tileValue]
   )
 
   if (tileValue.state !== SquareState.Empty && tileValue.state !== SquareState.HandEnd) {
     if (tileValue.state !== SquareState.Placed) {
-      drag(ref);
+      drag(ref)
       if (tileValue.state === SquareState.Hand) {
-        drop(ref);
+        drop(ref)
       }
     }
     return (
       <Box ref={ref}>
         <Tile isDragging={isDragging} tileType={tileValue.state} position={props.position}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
-    );
+    )
   } else {
-    const type = getSquareType(...getBoardCoordinates(props.position));
-    let style = styles.rackEndSquare;
+    const type = getSquareType(...getBoardCoordinates(props.position))
+    let style = styles.rackEndSquare
     if (tileValue.state !== SquareState.HandEnd) {
       style = ((v: SquareType) => {
         switch (v) {
@@ -66,8 +66,8 @@ export function BoardSquare(props: any) {
           case (SquareType.DoubleWord): { return styles.boardDoubleWord }
           case (SquareType.DoubleLetter): { return styles.boardDoubleLetter }
         }
-      })(type);
+      })(type)
     }
-    return (<Box ref={canPlayOnBoard ? drop : undefined} className={style}></Box>)
+    return (<Box ref={canPlayOnBoard ? drop : undefined} className={style} />)
   }
 }

@@ -1,9 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../../app/store';
-import { newGame } from '../board/boardSlice';
+import { createSlice } from '@reduxjs/toolkit'
+import { RootState } from '../../app/store'
+import { newGame } from '../board/boardSlice'
 
 export interface BagState {
-  tiles: string[];
+  tiles: string[]
 }
 
 const initialState: BagState = {
@@ -38,7 +38,7 @@ const initialState: BagState = {
     Array(1).fill('X'),
     Array(2).fill('Y'),
     Array(1).fill('Z'))
-};
+}
 
 export const bagSlice = createSlice({
   name: 'bag',
@@ -50,20 +50,20 @@ export const bagSlice = createSlice({
     },
     dumpTiles: (state) => {
       // Done in top level store scope
-    },
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(newGame, (state) => {
-      return initialState;
-    });
+      return initialState
+    })
   }
-});
+})
 
-export const { dumpTiles, takeTiles } = bagSlice.actions;
+export const { dumpTiles, takeTiles } = bagSlice.actions
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectBag = (state: RootState) => state.bag;
+export const selectBag = (state: RootState) => state.bag
 
-export default bagSlice.reducer;
+export default bagSlice.reducer

@@ -2,7 +2,7 @@ import { serverSlice } from './serverSlice'
 
 describe('stub', () => {
   it.todo('test')
-});
+})
 
 // describe('counter reducer', () => {
 //   const initialState: CounterState = {

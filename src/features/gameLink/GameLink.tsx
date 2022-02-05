@@ -1,49 +1,47 @@
-import React from 'react';
+import React from 'react'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-
-import {
-  selectBag,
-} from './../bag/bagSlice';
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
 
 import {
-  loadGame,
-} from './../board/boardSlice';
+  selectBag
+} from './../bag/bagSlice'
 
-import { useStore } from 'react-redux';
-import { Box } from '@mui/material';
-import { setGameId } from '../player/playersSlice';
+import {
+  loadGame
+} from './../board/boardSlice'
 
-export function GameLink() {
-  const dispatch = useAppDispatch();
-  const store = useStore();
-  const bag = useAppSelector(selectBag);
+import { useStore } from 'react-redux'
+import { Box } from '@mui/material'
+import { setGameId } from '../player/playersSlice'
 
-  const stateString = JSON.stringify(store.getState());
+export function GameLink () {
+  const dispatch = useAppDispatch()
+  const store = useStore()
+  const bag = useAppSelector(selectBag)
 
-  const encodedState = btoa(stateString !== undefined ? stateString : '');
-  const gameLink = window.location.origin + "/?game=" + encodedState
+  const stateString = JSON.stringify(store.getState())
+
+  const encodedState = btoa(stateString !== undefined ? stateString : '')
+  const gameLink = window.location.origin + '/?game=' + encodedState
 
   if (store.getState().players.gameId) {
-    window.history.replaceState({}, "", "?gameid=" + store.getState().players.gameId);
+    window.history.replaceState({}, '', '?gameid=' + store.getState().players.gameId)
   }
-
 
   if (bag && bag.tiles.length === 100) {
     // TODO make this parsing more robust
-    const search = window.location.search;
+    const search = window.location.search
     if (search.startsWith('?game=')) {
-      const gameState = JSON.parse(atob(search.substring(search.indexOf('=') + 1)));
-      dispatch(loadGame(gameState));
+      const gameState = JSON.parse(atob(search.substring(search.indexOf('=') + 1)))
+      dispatch(loadGame(gameState))
     } else if (search.startsWith('?gameid=')) {
-      dispatch(setGameId(search.substring(search.indexOf('=') + 1)));
+      dispatch(setGameId(search.substring(search.indexOf('=') + 1)))
     }
-
   }
 
   return (
     <Box>
       <a href={gameLink}>Link to this game</a>
     </Box>
-  );
+  )
 }

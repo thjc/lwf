@@ -2,7 +2,7 @@ import { bagSlice } from './bagSlice'
 
 describe('stub', () => {
   it.todo('test')
-});
+})
 
 // describe('counter reducer', () => {
 //   const initialState: CounterState = {

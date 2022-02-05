@@ -1,6 +1,6 @@
 interface ServerMessage {
-    cmd: string,
-    data: string,
+  cmd: string
+  data: string
 }
 
-export default ServerMessage;
+export default ServerMessage
