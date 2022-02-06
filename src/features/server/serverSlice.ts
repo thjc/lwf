@@ -34,6 +34,10 @@ export const serverSlice = createSlice({
     },
     sendGameState: (state) => {
 
+    },
+    disconnected: (state) => {
+      state.isConnected = false;
+      state.isEstablishingConnection = false;
     }
   }
 })
