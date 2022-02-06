@@ -58,9 +58,9 @@ export function BoardSquare (props: any) {
     const type = getSquareType(...getBoardCoordinates(props.position))
     let style = styles.rackEndSquare
     if (tileValue.state !== SquareState.HandEnd) {
-      style = ((v: SquareType) => {
+      style = styles.boardSquare + ' '  + ((v: SquareType) => {
         switch (v) {
-          case (SquareType.Plain): { return styles.boardSquare }
+          case (SquareType.Plain): { return "" }
           case (SquareType.TripleWord): { return styles.boardTripleWord }
           case (SquareType.TripleLetter): { return styles.boardTripleLetter }
           case (SquareType.DoubleWord): { return styles.boardDoubleWord }
