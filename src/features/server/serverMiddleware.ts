@@ -5,10 +5,18 @@ import { loadGame } from '../board/boardSlice'
 const ServerMiddleware: Middleware = store => {
   let socket: WebSocket | undefined
   let timeoutInterval: any;
+  let waitPong = false;
 
   setInterval(() => {
     if (socket && socket.readyState === socket.OPEN) {
       socket.send(JSON.stringify({cmd: "ping", data: ""}))
+      waitPong = true;
+      setTimeout(() => {
+        if (waitPong) {
+          console.log("Timeout on Pong");
+          socket?.close();
+        }
+      })
     }
   }, 15000)
 
@@ -46,6 +54,8 @@ const ServerMiddleware: Middleware = store => {
           if (msg.cmd === 'update') {
             const gameState = JSON.parse(atob(msg.data))
             store.dispatch(loadGame(gameState))
+          } else if (msg.cmd === "pong") {
+            waitPong = false;
           }
         }
 
