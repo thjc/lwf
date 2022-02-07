@@ -55,6 +55,8 @@ def stdinread():
             readgame(game_id)
         elif cmd == "store" and game_id != "":
             writegame(game_id, data)
+        elif cmd == "ping":
+            send_message("pong", "")
         else:
             print("Unknown Command", cmd, file=sys.stderr)
     except Exception as e:

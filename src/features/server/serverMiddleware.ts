@@ -4,17 +4,31 @@ import { loadGame } from '../board/boardSlice'
 
 const ServerMiddleware: Middleware = store => {
   let socket: WebSocket | undefined
+  let timeoutInterval: any;
+
+  setInterval(() => {
+    if (socket && socket.readyState === socket.OPEN) {
+      socket.send(JSON.stringify({cmd: "ping", data: ""}))
+    }
+  }, 15000)
 
   return next => action => {
-    const isConnectionEstablished = (socket != null) && store.getState().server.isConnected
+    const isConnectionEstablished = socket && store.getState().server.isConnected
 
     if (socket === undefined || socket.readyState === socket.CLOSED) {
       const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
       socket = new WebSocket(protocol + '://' + window.location.host + '/gamestate')
       if (socket !== undefined) {
+        timeoutInterval = setTimeout(() => {
+          console.log("Connection timeout")
+          socket?.close()
+        }, 5000)
+
         socket.onopen = () => {
           if (socket != null) {
+            clearTimeout(timeoutInterval);
+
             for (const msg of store.getState().server.messages) {
               socket.send(JSON.stringify(msg))
             }
@@ -35,8 +49,15 @@ const ServerMiddleware: Middleware = store => {
           }
         }
 
+        socket.onerror = (event: Event) => {
+          console.log("Socket error", event)
+          socket?.close()
+        }
+
         socket.onclose = () => {
-          setTimeout(() => (store.dispatch(serverActions.disconnected())), 1000);
+          if (store.getState().server.isConnected) {
+            setTimeout(() => (store.dispatch(serverActions.disconnected())), 1000);
+          }
         }
       }
     }

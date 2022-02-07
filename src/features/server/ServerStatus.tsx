@@ -6,9 +6,9 @@ import {
   serverActions
 } from './serverSlice'
 import { selectPlayers } from '../player/playersSlice'
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 
-export function ServerStatus () {
+export function ServerStatus() {
   const dispatch = useAppDispatch()
   const server = useAppSelector(selectServer)
   const players = useAppSelector(selectPlayers)
@@ -17,11 +17,24 @@ export function ServerStatus () {
     dispatch(serverActions.subscribeGame(''))
   }
 
+  let iconValue = '👤';
+  if (server.isEstablishingConnection) {
+    iconValue = '☇'
+  } else if (server.isConnected) {
+    iconValue = '👥'
+  }
+
   return (
     <Box width={1 / 2}>
-      <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-        Establishing: {server.isEstablishingConnection ? 'yes' : 'no'} Connected: {server.isConnected ? 'yes' : 'no'}
-      </Typography>
+      <IconButton
+        size='large'
+        edge='start'
+        color='inherit'
+        aria-label='menu'
+        sx={{ mr: 2 }}
+      >
+        {iconValue}
+      </IconButton>
     </Box>
   )
 }
