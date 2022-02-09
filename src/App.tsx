@@ -17,7 +17,7 @@ import { GameLink } from './features/gameLink/GameLink'
 import { ThemeProvider } from '@emotion/react'
 
 import { theme } from './theme'
-import { AppBar, Box, IconButton, Stack, Toolbar, Typography } from '@mui/material'
+import { AppBar, Box, Stack, Toolbar, Typography } from '@mui/material'
 
 function App () {
   return (

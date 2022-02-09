@@ -13,8 +13,8 @@ export function ServerStatus() {
   const server = useAppSelector(selectServer)
   const players = useAppSelector(selectPlayers)
 
-  if (server.isConnected && server.subscribedGame !== players.gameId) {
-    dispatch(serverActions.subscribeGame(''))
+  if (server.subscribedGame !== players.gameId) {
+    dispatch(serverActions.subscribeGame(players.gameId))
   }
 
   let iconValue = '👤';
