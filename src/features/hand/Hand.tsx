@@ -71,6 +71,7 @@ export function Hand () {
             </Button>
             <Button
               onClick={() => {
+                dispatch(returnTiles({}));  // Make sure we return tiles to hand before dump, or they get left on the board
                 dispatch(dumpTiles())
                 dispatch(nextPlayer(false))
                 dispatch(serverActions.sendGameState())
