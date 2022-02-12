@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 
 import { Tile } from './Tile'
 
@@ -16,15 +16,18 @@ import { Box } from '@mui/material'
 export function BoardSquare (props: any) {
   const dispatch = useAppDispatch()
 
-  const ref = useRef<HTMLDivElement>(null)
-
   const tileValue = props.tile
-  const canPlayOnBoard = props.canPlay || tileValue.state === SquareState.HandEnd
+  const canPlayOnBoard = props.canPlay
 
   const [, drop] = useDrop(
     () => ({
       accept: 'tile',
       drop: (item: any) => dispatch(placeWorkingTile({ value: item.value, from: item.from, place: props.position, dropType: tileValue.state })),
+      canDrop: (item, monitor) => {
+          return tileValue.state === SquareState.Hand ||
+          tileValue.state === SquareState.HandEnd ||
+          (canPlayOnBoard && tileValue.state === SquareState.Empty)
+        },
       collect: (monitor) => ({
         isOver: !!monitor.isOver()
       })
@@ -35,6 +38,7 @@ export function BoardSquare (props: any) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'tile',
     item: { value: tileValue, from: props.position },
+    canDrag: tileValue.state === SquareState.Hand || tileValue.state === SquareState.Working,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging()
     })
@@ -43,14 +47,8 @@ export function BoardSquare (props: any) {
   )
 
   if (tileValue.state !== SquareState.Empty && tileValue.state !== SquareState.HandEnd) {
-    if (tileValue.state !== SquareState.Placed) {
-      drag(ref)
-      if (tileValue.state === SquareState.Hand) {
-        drop(ref)
-      }
-    }
     return (
-      <Box ref={ref}>
+      <Box ref={(node: React.ReactElement) => drag(drop(node))}>
         <Tile isDragging={isDragging} tileType={tileValue.state} position={props.position}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
     )
@@ -68,6 +66,6 @@ export function BoardSquare (props: any) {
         }
       })(type)}`
     }
-    return (<Box ref={canPlayOnBoard ? drop : undefined} className={style} />)
+    return (<Box ref={drop} className={style} />)
   }
 }
