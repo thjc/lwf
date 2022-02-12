@@ -80,11 +80,12 @@ export const playersSlice = createSlice({
       return state
     })
     builder.addCase(newGame, (state) => {
-      state.players = [{ username: state.username, score: 0, penalty: 0, tiles: [] }]
+      state.players = []
       state.currentPlayer = 0
       state.passCount = 0
       state.loggedInPlayer = 0
       state.gameId = uuidv4()
+      console.log("Starting new game: ", state.gameId)
       return state
     })
   }

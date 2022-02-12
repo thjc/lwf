@@ -118,7 +118,8 @@ const ServerMiddleware: Middleware = store => {
       const encodedState = btoa(stateString !== undefined ? stateString : '')
       sendOrQueue('store', encodedState)
     } else if (serverActions.subscribeGame.match(action)) {
-      const gameId = action.payload
+      const gameId = store.getState().players.gameId
+      action.payload = gameId;
       console.log("Game of interest changed to ", gameId)
       if (gameId) {
         CloseSocket(false);

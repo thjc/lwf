@@ -1,10 +1,6 @@
 import React from 'react'
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
-
-import {
-  selectBag
-} from './../bag/bagSlice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
 
 import {
   loadGame
@@ -12,12 +8,12 @@ import {
 
 import { useStore } from 'react-redux'
 import { Box } from '@mui/material'
-import { setGameId } from '../player/playersSlice'
+import { selectPlayers, setGameId } from '../player/playersSlice'
 
 export function GameLink () {
   const dispatch = useAppDispatch()
   const store = useStore()
-  const bag = useAppSelector(selectBag)
+  const players = useAppSelector(selectPlayers)
 
   const stateString = JSON.stringify(store.getState())
 
@@ -25,10 +21,8 @@ export function GameLink () {
   const gameLink = window.location.origin + '/?game=' + encodedState
 
   if (store.getState().players.gameId) {
-    window.history.replaceState({}, '', '?gameid=' + store.getState().players.gameId)
-  }
-
-  if (bag && bag.tiles.length === 100) {
+    window.history.replaceState({}, '', '?gameid=' + players.gameId)
+  } else {
     // TODO make this parsing more robust
     const search = window.location.search
     if (search.startsWith('?game=')) {

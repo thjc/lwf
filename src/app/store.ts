@@ -18,15 +18,17 @@ type StoreState = ReturnType<typeof combinedReducer>
 function crossSliceReducer (state: StoreState, action: any) {
   const pickTiles = (newstate: StoreState) => {
     const availableTiles = [...newstate.bag.tiles]
-    const pickedTiles = []
-    const count = 7 - newstate.players.players[newstate.players.loggedInPlayer].tiles.length
-    for (let ii = 0; ii < count && availableTiles.length > 0; ++ii) {
-      const index = Math.floor(Math.random() * availableTiles.length)
-      const tileValue = availableTiles.splice(index, 1)
-      pickedTiles.push(tileValue[0])
+    for (const player in newstate.players.players) {
+      const pickedTiles = []
+      const count = 7 - newstate.players.players[player].tiles.length
+      for (let ii = 0; ii < count && availableTiles.length > 0; ++ii) {
+        const index = Math.floor(Math.random() * availableTiles.length)
+        const tileValue = availableTiles.splice(index, 1)
+        pickedTiles.push(tileValue[0])
+      }
+      newstate.players.players[player].tiles.push(...pickedTiles)
     }
     newstate.bag.tiles = availableTiles
-    newstate.players.players[newstate.players.loggedInPlayer].tiles.push(...pickedTiles)
   }
 
   switch (action.type) {

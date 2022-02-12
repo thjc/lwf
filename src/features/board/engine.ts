@@ -27,6 +27,7 @@ export interface BoardState {
 }
 
 export const boardSize = 15
+export const initialBagSize = 100
 
 export function getTileValue (tileLetter: string): number {
   const table: tileValue = {
