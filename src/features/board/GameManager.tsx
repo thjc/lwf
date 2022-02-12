@@ -29,7 +29,6 @@ export function GameManager () {
   const dispatchEnd = () => {
     if (gameOver) {
       dispatch(endGame())
-      // dispatch(serverActions.sendGameState());
     }
   }
   useEffect(dispatchEnd)
@@ -40,6 +39,7 @@ export function GameManager () {
         className={styles.button}
         aria-label='New Game'
         onClick={() => {
+          dispatch(serverActions.unsubscribeGame())
           dispatch(newGame())
           dispatch(serverActions.subscribeGame(''))
           dispatch(takeTiles())

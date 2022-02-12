@@ -124,9 +124,11 @@ const ServerMiddleware: Middleware = store => {
         CloseSocket(false);
         socket = ConnectAndSubscribe(gameId)
       }
+    } else if (serverActions.unsubscribeGame.match(action)) {
+      CloseSocket(false);
     }
 
-    next(action)
+    next(action);
   }
 }
 
