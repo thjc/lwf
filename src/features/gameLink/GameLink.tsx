@@ -41,7 +41,7 @@ export function GameLink () {
 
   return (
     <Box>
-      <a href={gameLink}>Link to this game</a>
+      <a href={gameLink}>Backup link to this game</a>
     </Box>
   )
 }
