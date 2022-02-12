@@ -8,6 +8,7 @@ import {
 
 import {
   dumpTiles,
+  selectBag,
   takeTiles
 } from './../bag/bagSlice'
 
@@ -33,6 +34,7 @@ export function Hand () {
   const dispatch = useAppDispatch()
   const board = useAppSelector(selectBoard)
   const players = useAppSelector(selectPlayers)
+  const bag = useAppSelector(selectBag)
 
   // are we in the game?
   if (players.loggedInPlayer >= 0) {
@@ -76,6 +78,7 @@ export function Hand () {
                 dispatch(nextPlayer(false))
                 dispatch(serverActions.sendGameState())
               }}
+              disabled={bag.tiles.length === 0}
             >
               Dump
             </Button>
