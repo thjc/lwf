@@ -5,12 +5,14 @@ export interface ServerState {
   isEstablishingConnection: boolean
   isConnected: boolean
   subscribedGame: string
+  sequence: number
 }
 
 const initialState: ServerState = {
   isEstablishingConnection: true,
   isConnected: false,
-  subscribedGame: ''
+  subscribedGame: '',
+  sequence: 0
 }
 
 export const serverSlice = createSlice({
@@ -26,6 +28,7 @@ export const serverSlice = createSlice({
       state.isEstablishingConnection = false
     },
     sendGameState: (state) => {
+      state.sequence = state.sequence + 1
     },
     unsubscribeGame: (state) => {
       state.subscribedGame = '';

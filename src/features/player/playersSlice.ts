@@ -25,7 +25,7 @@ const initialState: {
   username: '',
   passCount: 0,
   players: [],
-  gameId: ''
+  gameId: '',
 }
 
 export const playersSlice = createSlice({

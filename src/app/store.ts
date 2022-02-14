@@ -82,6 +82,12 @@ function crossSliceReducer (state: StoreState, action: any) {
       // clear out username we recieved with the game state so we reset to current user
       action.payload.players.username = ''
       action.payload.players.loggedInPlayer = -1
+      if (!action.payload.server.sequence) {
+        action.payload.server.sequence = 0
+      }
+      action.payload.server.isConnected = state.server.isConnected
+      action.payload.server.isEstablishingConnection = state.server.isEstablishingConnection
+      action.payload.server.subscribedGame = state.server.subscribedGame
 
       return action.payload
     }

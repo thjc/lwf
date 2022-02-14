@@ -114,7 +114,9 @@ const ServerMiddleware: Middleware = store => {
 
   return next => action => {
     if (serverActions.sendGameState.match(action)) {
-      const stateString = JSON.stringify(store.getState())
+      let state = JSON.parse(JSON.stringify(store.getState()));
+      state.server.sequence = state.server.sequence + 1
+      const stateString = JSON.stringify(state)
       const encodedState = btoa(stateString !== undefined ? stateString : '')
       sendOrQueue('store', encodedState)
     } else if (serverActions.subscribeGame.match(action)) {
