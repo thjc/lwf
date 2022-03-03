@@ -24,7 +24,7 @@ export function TileRack () {
         <div className={styles.handGrid}>
           {Array.from(player.tiles.values()).map((x, n) => { return (<BoardSquare key={n} position={n} tile={{ value: x, state: SquareState.Hand }} />) })}
           {/* extra empty tile for dropping back to hand */}
-          <BoardSquare key={player.tiles.length} position={player.tiles.length} tile={{ value: '', state: SquareState.HandEnd }} />
+          <BoardSquare key={player.tiles.length} position={player.tiles.length} canPlay={true} tile={{ value: '', state: SquareState.HandEnd }} />
         </div>
       </Box>
     </div>
