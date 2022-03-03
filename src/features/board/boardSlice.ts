@@ -16,7 +16,7 @@ export const boardSlice = createSlice({
       // done in top level store reducer
     },
     playWord: (state, action) => {
-      // mostly done in top level stop reducer
+      // mostly done in top level store reducer
       state.blankToSelect = -1
     },
     placeWorkingTile: (state, action) => {

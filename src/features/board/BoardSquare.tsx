@@ -49,7 +49,7 @@ export function BoardSquare(props: any) {
   if (tileValue.state !== SquareState.Empty && tileValue.state !== SquareState.HandEnd) {
     return (
       <Box ref={(node: React.ReactElement) => drag(drop(node))}>
-        <Tile isDragging={isDragging} tileType={tileValue.state} position={props.position}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
+        <Tile isDragging={isDragging} tileType={tileValue.state} tileAge={tileValue.age} position={props.position}>{tileValue.value ? tileValue.value.toUpperCase() : ' '}</Tile>
       </Box>
     )
   } else {

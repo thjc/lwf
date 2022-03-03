@@ -20,6 +20,7 @@ export function Tile (props: any) {
       className={[
         props.isDragging ? styles.dragTile : '',
         props.tileType === SquareState.Working ? styles.workingTile : '',
+        props.tileAge === 1 ? styles.lastPlayedTile : '',
         tileLetter[0] === ' ' ? styles.blankTile : '',
         styles.tile
       ].join(' ')} onClick={() => tileClick()}

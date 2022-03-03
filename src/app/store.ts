@@ -59,7 +59,15 @@ function crossSliceReducer (state: StoreState, action: any) {
       if (startPlace !== undefined && isValidPlacement(squares) && isValidWordSet(squares, startPlace[0], startPlace[1], direction)) {
         let score = scoreWords(squares, startPlace[0], startPlace[1], direction)
         let letterCount = 0
-        newstate.board.squares.forEach((value) => { if (value.state === SquareState.Working) { value.state = SquareState.Placed; letterCount++ } })
+        newstate.board.squares.forEach((value) => {
+          if (value.state === SquareState.Working) {
+            value.state = SquareState.Placed;
+            value.age = 1;
+            letterCount++;
+          } else {
+            delete value.age;
+          }
+        })
         if (letterCount === 7) { score += 50 }
         newstate.players.players[newstate.players.currentPlayer].score += score
       }

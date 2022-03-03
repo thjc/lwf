@@ -19,6 +19,7 @@ export enum WordDirection {
 export interface Square {
   value: string
   state: SquareState
+  age?: number
 }
 
 export interface BoardState {
