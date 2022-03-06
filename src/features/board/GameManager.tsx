@@ -10,6 +10,7 @@ import { newGame, selectBoard } from './boardSlice'
 import { findStartWorkingTile, initialBagSize } from './engine'
 
 import {
+  selectServer,
   serverActions
 } from '../server/serverSlice'
 
@@ -17,9 +18,16 @@ export function GameManager () {
   const players = useAppSelector(selectPlayers)
   const board = useAppSelector(selectBoard)
   const bag = useAppSelector(selectBag)
+  const server = useAppSelector(selectServer)
   const dispatch = useAppDispatch()
   const isLoggedIn = players.username !== ''
   const isInGame = players.loggedInPlayer >= 0
+
+  useEffect(() => {
+    if (server.subscribedGame !== players.gameId) {
+      dispatch(serverActions.subscribeGame(players.gameId))
+    }
+  })
 
   const gameStarted = bag.tiles.length !== initialBagSize;
   // make sure we don't detect end of game when turn in progress, or no players loaded

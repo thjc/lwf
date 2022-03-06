@@ -77,6 +77,12 @@ const ServerMiddleware: Middleware = store => {
           store.dispatch(loadGame(gameState))
         } else if (msg.cmd === "pong") {
           waitPong = false;
+        } else if (msg.cmd === "replay") {
+          const gameState = JSON.parse(atob(msg.data))
+          const oldState = store.getState()
+          gameState.server.sequence = oldState.server.sequence
+          gameState.server.playbackSequence = oldState.server.playbackSequence
+          store.dispatch(loadGame(gameState))
         }
       }
 
@@ -129,6 +135,11 @@ const ServerMiddleware: Middleware = store => {
       }
     } else if (serverActions.unsubscribeGame.match(action)) {
       CloseSocket(false);
+    } else if (serverActions.fetchOldState.match(action)) {
+      sendOrQueue('fetch', action.payload.toString())
+    } else if (serverActions.resyncState.match(action)) {
+      const gameId = store.getState().players.gameId
+      sendOrQueue('load', gameId)
     }
 
     next(action);

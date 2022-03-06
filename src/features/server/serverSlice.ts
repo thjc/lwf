@@ -6,13 +6,15 @@ export interface ServerState {
   isConnected: boolean
   subscribedGame: string
   sequence: number
+  playbackSequence: number | undefined
 }
 
 const initialState: ServerState = {
   isEstablishingConnection: true,
   isConnected: false,
   subscribedGame: '',
-  sequence: 0
+  sequence: 0,
+  playbackSequence: undefined,
 }
 
 export const serverSlice = createSlice({
@@ -32,6 +34,12 @@ export const serverSlice = createSlice({
     },
     unsubscribeGame: (state) => {
       state.subscribedGame = '';
+    },
+    fetchOldState: (state,  action: PayloadAction<number>) => {
+      state.playbackSequence = action.payload
+    },
+    resyncState: (state) => {
+      state.playbackSequence = undefined
     },
     disconnected: (state) => {
       state.isConnected = false;

@@ -18,6 +18,7 @@ import { ThemeProvider } from '@emotion/react'
 
 import { theme } from './theme'
 import { AppBar, Box, Stack, Toolbar, Typography } from '@mui/material'
+import { Playback } from './features/playback/Playback'
 
 function App () {
   return (
@@ -39,6 +40,7 @@ function App () {
           <Hand />
           <Players />
           <Bag />
+          <Playback />
         </DndProvider>
         <GameLink />
       </Stack>

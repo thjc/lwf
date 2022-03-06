@@ -28,12 +28,13 @@ def send_message(cmd, data):
     print(json.dumps({"cmd": cmd, "data": data}))
     sys.stdout.flush()
 
-def readgame(gameid, force=False):
+def readgame(gameid, force=False, seq=-1):
     global last_game_state
     try:
-        game_state = open(os.path.join(datadir, gameid)).readline()
+        gamefile = gameid if seq < 0 else "{}.{:03d}".format(gameid, seq)
+        game_state = open(os.path.join(datadir, gamefile)).readline()
         if force or game_state != last_game_state:
-            send_message("update", game_state)
+            send_message("update" if seq < 0 else "replay", game_state)
             last_game_state = game_state
     except FileNotFoundError:
         send_message("nogame", "")
@@ -73,6 +74,8 @@ def stdinread():
                 writegame(game_id, data)
             elif cmd == "ping":
                 send_message("pong", "")
+            elif cmd == "fetch":
+                readgame(game_id, True, int(data))
             else:
                 print("Unknown Command", cmd, file=sys.stderr)
     except Exception as e:

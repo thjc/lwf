@@ -23,6 +23,7 @@ import {
 } from './../board/boardSlice'
 
 import {
+  selectServer,
   serverActions
 } from '../server/serverSlice'
 
@@ -35,9 +36,10 @@ export function Hand () {
   const board = useAppSelector(selectBoard)
   const players = useAppSelector(selectPlayers)
   const bag = useAppSelector(selectBag)
+  const server = useAppSelector(selectServer)
 
   // are we in the game?
-  if (players.loggedInPlayer >= 0) {
+  if (players.loggedInPlayer >= 0 && server.playbackSequence === undefined) {
     const isCurrentPlayer = players.currentPlayer === players.loggedInPlayer
 
     return (

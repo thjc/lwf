@@ -1,21 +1,13 @@
 import React from 'react'
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppSelector } from '../../app/hooks'
 import {
   selectServer,
-  serverActions
 } from './serverSlice'
-import { selectPlayers } from '../player/playersSlice'
 import { Box, IconButton } from '@mui/material'
 
 export function ServerStatus() {
-  const dispatch = useAppDispatch()
   const server = useAppSelector(selectServer)
-  const players = useAppSelector(selectPlayers)
-
-  if (server.subscribedGame !== players.gameId) {
-    dispatch(serverActions.subscribeGame(players.gameId))
-  }
 
   let iconValue = '👤';
   if (server.isEstablishingConnection) {

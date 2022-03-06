@@ -118,8 +118,7 @@
 }
 
 .lastPlayedTile {
-  background-color: firebrick;
-  border-style: dashed;
+  background-color: violet;
 }
 
 .rackEndSquare {
