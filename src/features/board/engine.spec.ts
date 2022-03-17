@@ -145,6 +145,15 @@ describe('tile validaton', () => {
     expect((collectWords(makeTestSquares(['  T', '  E', '  S', '  T', 'jest']), 0, 4, WordDirection.Horizontal))
       .map(extractWords))
       .toEqual(['JEST', 'TESTS'])
+
+    // for single letter plays, we may actually have the wrong direcrtion
+    // so we should give the right answer either way
+    expect((collectWords(makeTestSquares(['  T', ' qI', '  N',]), 1, 1, WordDirection.Horizontal))
+      .map(extractWords))
+      .toEqual(['QI'])
+    expect((collectWords(makeTestSquares(['  T', ' qI', '  N',]), 1, 1, WordDirection.Vertical))
+      .map(extractWords))
+      .toEqual(['QI'])
   })
 })
 

@@ -109,6 +109,7 @@ export function findStartWorkingTile (squares: Square[]): [number, number] | und
   return undefined
 }
 
+// this can be wrong if we play a single tile play, but we catch that later
 export function getDirection (squares: Square[]): WordDirection {
   const summary = [new Set<number>(), new Set<number>()]
 
@@ -187,6 +188,7 @@ export function containsTile (squares: Square[], startX: number, startY: number,
 export function isValidPlacement (squares: Square[]): boolean {
   const firstTurn = squares.reduce((acc, v) => acc && v.state !== SquareState.Placed, true)
   let noGaps = false
+  let wordCount = 0
   // find the first new tile
   const firstWorking = findStartWorkingTile(squares)
   let containsCentre = false
@@ -201,13 +203,14 @@ export function isValidPlacement (squares: Square[]): boolean {
       noGaps = hasNoGaps(squares, firstWorking[0], firstWorking[1], direction)
     }
     const words = collectWords(squares, firstWorking[0], firstWorking[1], direction)
+    wordCount = words.length
     for (const w of words) {
       w.forEach(checkAllNewLetters)
     }
     containsCentre ||= containsTile(squares, firstWorking[0], firstWorking[1], direction, 7, 7)
   }
 
-  return noGaps && (firstTurn || !allNewLetters) && (!firstTurn || containsCentre)
+  return wordCount > 0 && noGaps && (firstTurn || !allNewLetters) && (!firstTurn || containsCentre)
 }
 
 export function isValidWord (word: placedLetter[]): boolean {
@@ -223,7 +226,12 @@ export interface placedLetter {
 }
 
 export function collectWords (squares: Square[], xStart: number, yStart: number, direction: WordDirection): placedLetter[][] {
-  const ret = [getWord(squares, xStart, yStart, direction)]
+  let ret = []
+  // special case for a single letter play make sure all words are > 1 letter
+  const first = getWord(squares, xStart, yStart, direction);
+  if (first.length > 1) {
+    ret.push(first);
+  }
 
   const next = (x: number, y: number) => { return direction === WordDirection.Horizontal ? [x + 1, y] : [x, y + 1] }
 
